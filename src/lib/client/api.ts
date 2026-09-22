@@ -1,30 +1,4 @@
-/** Small fetch helper for the admin UI. */
-export class ApiError extends Error {
-  status: number;
-  constructor(message: string, status: number) {
-    super(message);
-    this.status = status;
-  }
-}
-
-export async function api<T = unknown>(url: string, init: RequestInit & { json?: unknown } = {}): Promise<T> {
-  const { json, ...rest } = init;
-  const res = await fetch(url, {
-    ...rest,
-    headers: { ...(json !== undefined ? { "content-type": "application/json" } : {}), ...(rest.headers ?? {}) },
-    body: json !== undefined ? JSON.stringify(json) : rest.body,
-    credentials: "same-origin",
-  });
-  if (res.status === 401) {
-    // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- outside React; a full reload clears stale state
-    if (typeof window !== "undefined") window.location.href = `/admin/login?next=${encodeURIComponent(window.location.pathname)}`;
-    throw new ApiError("Unauthorized", 401);
-  }
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new ApiError((data as { error?: string }).error ?? `Request failed (${res.status})`, res.status);
-  return data as T;
-}
-
+/** Small formatting helpers for the admin UI. */
 export function formatBytes(n: number) {
   if (n < 1024) return `${n} B`;
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} KB`;

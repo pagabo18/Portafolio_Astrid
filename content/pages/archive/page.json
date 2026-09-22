@@ -1,0 +1,32 @@
+{
+  "slug": "archive",
+  "published": {
+    "meta": {
+      "title": "Archive",
+      "seoTitle": "",
+      "seoDescription": "",
+      "ogPhotoId": null
+    },
+    "document": {
+      "version": 1,
+      "blocks": [
+        {
+          "id": "b_48ae19ba",
+          "visible": true,
+          "spacingTop": "m",
+          "spacingBottom": "m",
+          "background": "default",
+          "label": "",
+          "type": "photo-archive",
+          "columns": 4,
+          "showFilters": true,
+          "showCaptions": true,
+          "sort": "manual"
+        }
+      ]
+    },
+    "publishedAt": "2026-01-01T00:00:00.000Z"
+  },
+  "publishedAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z"
+}

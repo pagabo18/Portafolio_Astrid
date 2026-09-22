@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import type { Block, BlocksDocument } from "@/lib/blocks/schema";
 import type { PhotoView } from "@/lib/photos/view";
-import { api } from "@/lib/client/api";
+import { publishPage, publishProject, savePageDraft, saveProjectDraft, updateProjectMeta } from "@/lib/content/admin";
+import type { PageSlug } from "@/lib/content/types";
 import { PhotoPicker } from "@/components/admin/PhotoPicker";
 import { useEditor } from "./store";
 import type { EditorProps, EditorTarget } from "./types";
@@ -22,7 +22,6 @@ const AUTOSAVE_MS = 1500;
 type PickReq = { multiple: boolean; onPick: (p: PhotoView[]) => void };
 
 export function Editor(props: EditorProps) {
-  const router = useRouter();
   const [target, setTarget] = useState<EditorTarget>(props.target);
   const [archivePhotos, setArchivePhotos] = useState(props.archivePhotos ?? []);
   const [status, setStatus] = useState({ published: props.target.status === "published", hasUnpublished: props.target.hasUnpublished, publishedAt: props.target.publishedAt });
@@ -49,8 +48,8 @@ export function Editor(props: EditorProps) {
   const redo = useEditor((s) => s.redo);
 
   const scope = target.type;
-  const draftUrl = target.type === "project" ? `/api/admin/projects/${target.id}/draft` : `/api/admin/pages/${target.id}/draft`;
-  const publishUrl = target.type === "project" ? `/api/admin/projects/${target.id}/publish` : `/api/admin/pages/${target.id}/publish`;
+  const targetType = target.type;
+  const targetId = target.id;
 
   // load initial state once
   useEffect(() => {
@@ -74,7 +73,7 @@ export function Editor(props: EditorProps) {
     setSaveState("saving");
     const run = async () => {
       try {
-        const r = await api<{ hasUnpublished: boolean }>(draftUrl, { method: "PUT", json: { document: snapshot } });
+        const r = targetType === "project" ? await saveProjectDraft(targetId, snapshot) : await savePageDraft(targetId as PageSlug, snapshot);
         if (latest.current === snapshot) markSaved();
         else setSaveState("unsaved");
         setStatus((s) => ({ ...s, hasUnpublished: r.hasUnpublished }));
@@ -86,7 +85,7 @@ export function Editor(props: EditorProps) {
     inflight.current = run();
     await inflight.current;
     inflight.current = null;
-  }, [draftUrl, markSaved, setSaveState]);
+  }, [targetType, targetId, markSaved, setSaveState]);
 
   useEffect(() => {
     saveRef.current = save;
@@ -117,10 +116,14 @@ export function Editor(props: EditorProps) {
     try {
       if (useEditor.getState().saveState !== "saved") await save();
       if (inflight.current) await inflight.current;
-      const r = await api<{ publishedAt: string | null; slug?: string }>(publishUrl, { method: "POST" });
-      setStatus({ published: true, hasUnpublished: false, publishedAt: r.publishedAt });
-      if (r.slug && target.type === "project") setTarget({ ...target, slug: r.slug, status: "published" });
-      router.refresh();
+      if (target.type === "project") {
+        const f = await publishProject(target.id);
+        setStatus({ published: true, hasUnpublished: false, publishedAt: f.publishedAt });
+        setTarget({ ...target, slug: f.slug, status: "published" });
+      } else {
+        const f = await publishPage(target.id as PageSlug);
+        setStatus({ published: true, hasUnpublished: false, publishedAt: f.publishedAt });
+      }
     } finally {
       setPublishing(false);
     }
@@ -177,8 +180,8 @@ export function Editor(props: EditorProps) {
 
   async function rename(name: string) {
     if (target.type !== "project") return;
-    const r = await api<{ slug: string; name: string }>(`/api/admin/projects/${target.id}`, { method: "PATCH", json: { name } });
-    setTarget({ ...target, name: r.name, slug: r.slug, meta: { ...target.meta, name: r.name, slug: r.slug } });
+    const d = await updateProjectMeta(target.id, { name });
+    setTarget({ ...target, name: d.meta.name, slug: d.meta.slug, meta: { ...target.meta, name: d.meta.name, slug: d.meta.slug } });
     setStatus((s) => ({ ...s, hasUnpublished: true }));
   }
 
@@ -237,7 +240,6 @@ export function Editor(props: EditorProps) {
           onSaved={(t) => {
             setTarget({ ...target, ...t } as EditorTarget);
             setStatus((s) => ({ ...s, hasUnpublished: true }));
-            router.refresh();
           }}
         />
       ) : (

@@ -1,0 +1,17 @@
+{
+  "siteName": "Portfolio",
+  "tagline": "Photography",
+  "authorName": "",
+  "email": "",
+  "instagram": "",
+  "seoTitle": "",
+  "seoDescription": "",
+  "footerText": "",
+  "nav": [
+    { "label": "Work", "href": "/" },
+    { "label": "Archive", "href": "/archive" },
+    { "label": "About", "href": "/about" }
+  ],
+  "theme": "paper",
+  "uploadMaxPx": 0
+}

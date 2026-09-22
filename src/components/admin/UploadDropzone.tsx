@@ -2,52 +2,29 @@
 
 import { useCallback, useRef, useState } from "react";
 import type { PhotoView } from "@/lib/photos/view";
+import { uploadPhotos, type UploadProgress as Progress } from "@/lib/content/admin";
+import { isSupportedImage } from "@/lib/images/browser";
 
-type Progress = { name: string; state: "queued" | "uploading" | "done" | "error"; error?: string };
-
-/**
- * Multi-file upload with drag & drop. Files are sent in small batches so a
- * 30-photo upload shows progress and one failure does not lose the rest.
- */
+/** Multi-file upload with drag & drop: processed in the browser, committed one by one. */
 export function useUploader(onUploaded: (photos: PhotoView[]) => void, extra: { projectId?: string | null; categoryId?: string | null } = {}) {
   const [progress, setProgress] = useState<Progress[]>([]);
   const [busy, setBusy] = useState(false);
+  const { projectId, categoryId } = extra;
 
   const upload = useCallback(
     async (files: File[]) => {
-      const images = files.filter((f) => f.type.startsWith("image/") || /\.(heic|heif|tiff?|avif)$/i.test(f.name));
+      const images = files.filter(isSupportedImage);
       if (!images.length) return;
       setBusy(true);
-      setProgress(images.map((f) => ({ name: f.name, state: "queued" })));
-      const BATCH = 3;
-      for (let i = 0; i < images.length; i += BATCH) {
-        const batch = images.slice(i, i + BATCH);
-        setProgress((p) => p.map((x) => (batch.some((b) => b.name === x.name) ? { ...x, state: "uploading" } : x)));
-        const fd = new FormData();
-        for (const f of batch) fd.append("files", f);
-        if (extra.projectId) fd.append("projectId", extra.projectId);
-        if (extra.categoryId) fd.append("categoryId", extra.categoryId);
-        try {
-          const res = await fetch("/api/admin/photos", { method: "POST", body: fd, credentials: "same-origin" });
-          const data = (await res.json()) as { photos?: PhotoView[]; errors?: { name: string; error: string }[]; error?: string };
-          if (!res.ok) throw new Error(data.error ?? "Upload failed");
-          if (data.photos?.length) onUploaded(data.photos);
-          setProgress((p) =>
-            p.map((x) => {
-              const err = data.errors?.find((e) => e.name === x.name);
-              if (err) return { ...x, state: "error", error: err.error };
-              if (batch.some((b) => b.name === x.name)) return { ...x, state: "done" };
-              return x;
-            }),
-          );
-        } catch (e) {
-          setProgress((p) => p.map((x) => (batch.some((b) => b.name === x.name) ? { ...x, state: "error", error: e instanceof Error ? e.message : "Failed" } : x)));
-        }
+      try {
+        const added = await uploadPhotos(images, { projectId, categoryId }, setProgress);
+        if (added.length) onUploaded(added);
+      } finally {
+        setBusy(false);
+        setTimeout(() => setProgress((p) => (p.every((x) => x.state === "done") ? [] : p)), 2500);
       }
-      setBusy(false);
-      setTimeout(() => setProgress((p) => (p.every((x) => x.state === "done") ? [] : p)), 2500);
     },
-    [onUploaded, extra.projectId, extra.categoryId],
+    [onUploaded, projectId, categoryId],
   );
 
   return { upload, progress, busy, clear: () => setProgress([]) };
@@ -58,21 +35,14 @@ export function UploadDropzone({ onFiles, compact, children }: { onFiles: (files
   const input = useRef<HTMLInputElement>(null);
   return (
     <div
-      onDragOver={(e) => {
-        e.preventDefault();
-        setOver(true);
-      }}
+      onDragOver={(e) => { e.preventDefault(); setOver(true); }}
       onDragLeave={() => setOver(false)}
-      onDrop={(e) => {
-        e.preventDefault();
-        setOver(false);
-        onFiles(Array.from(e.dataTransfer.files));
-      }}
+      onDrop={(e) => { e.preventDefault(); setOver(false); onFiles(Array.from(e.dataTransfer.files)); }}
       onClick={() => input.current?.click()}
       className={`cursor-pointer rounded-sm border border-dashed text-center transition ${over ? "border-neutral-900 bg-neutral-100" : "border-neutral-300 bg-white hover:border-neutral-500"} ${compact ? "px-3 py-2 text-[11px]" : "px-6 py-10 text-[12px]"} text-neutral-600`}
     >
-      <input ref={input} type="file" accept="image/*,.heic,.heif,.tif,.tiff" multiple hidden onChange={(e) => { onFiles(Array.from(e.target.files ?? [])); e.target.value = ""; }} />
-      {children ?? (compact ? "Drop photos or click to upload" : <><div className="text-[13px] text-neutral-900">Drop photographs here</div><div className="mt-1 text-neutral-500">or click to browse · JPG, PNG, WebP, TIFF, HEIC · originals are kept, web variants generated automatically</div></>)}
+      <input ref={input} type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden onChange={(e) => { onFiles(Array.from(e.target.files ?? [])); e.target.value = ""; }} />
+      {children ?? (compact ? "Drop photos or click to upload" : <><div className="text-[13px] text-neutral-900">Drop photographs here</div><div className="mt-1 text-neutral-500">or click to browse · JPG, PNG, WebP · each photo becomes a commit; web variants are generated on publish</div></>)}
     </div>
   );
 }

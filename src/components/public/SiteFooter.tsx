@@ -1,4 +1,4 @@
-import type { SiteSettings } from "@/lib/data/settings";
+import type { SiteSettings } from "@/lib/content/types";
 
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
   const year = new Date().getFullYear();

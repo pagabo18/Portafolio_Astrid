@@ -5,7 +5,7 @@ import type { Block, ImageGroupBlock, ImageSlot, Spacing, SlotOverride, Aspect }
 import { SPACING, ASPECTS } from "@/lib/blocks/schema";
 import { applyGroupLayout, applySingleLayout, GROUP_LAYOUT_INFO, SINGLE_LAYOUT_INFO, spacingLabel, type LayoutInfo } from "@/lib/blocks/templates";
 import type { PhotoView } from "@/lib/photos/view";
-import { api } from "@/lib/client/api";
+import { updatePhoto } from "@/lib/content/admin";
 import { Field, Segmented, Stepper, Toggle } from "@/components/admin/ui/Fields";
 import { FocalPointEditor } from "@/components/admin/FocalPointEditor";
 import { Modal } from "@/components/admin/ui/Modal";
@@ -227,7 +227,7 @@ function SlotInspector({ block, slot, onPickPhotos }: { block: Block; slot: Imag
       ) : null}
 
       {photo ? (
-        <FocalModal open={focal} onClose={() => setFocal(false)} photo={photo} slot={slot} onSlot={(f) => set({ focal: f })} onPhoto={(x, y) => { mergePhotos([{ ...photo, focalX: x, focalY: y }]); api(`/api/admin/photos/${photo.id}`, { method: "PATCH", json: { focalX: x, focalY: y } }); }} />
+        <FocalModal open={focal} onClose={() => setFocal(false)} photo={photo} slot={slot} onSlot={(f) => set({ focal: f })} onPhoto={(x, y) => { mergePhotos([{ ...photo, focalX: x, focalY: y }]); void updatePhoto(photo.id, { focalX: x, focalY: y }); }} />
       ) : null}
     </div>
   );

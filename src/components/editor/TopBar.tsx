@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useEditor } from "./store";
+import { withBase } from "@/lib/content/paths";
 import type { EditorTarget } from "./types";
 
 export function TopBar({
@@ -36,8 +37,8 @@ export function TopBar({
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(target.name);
 
-  const previewHref = target.type === "project" ? `/preview/project/${target.slug}?token=${target.previewToken}` : `/preview/page/${target.slug}?token=${target.previewToken}`;
-  const liveHref = target.type === "project" ? `/projects/${target.slug}` : target.slug === "home" ? "/" : `/${target.slug}`;
+  const previewHref = `/preview?type=${target.type}&id=${target.id}`;
+  const liveHref = withBase(target.type === "project" ? `/projects/${target.slug}/` : target.slug === "home" ? "/" : `/${target.slug}/`);
   const backHref = target.type === "project" ? "/admin/projects" : "/admin/pages";
 
   const stateLabel =
@@ -81,7 +82,7 @@ export function TopBar({
       <button className="ui-btn h-7" onClick={onOpenVersions}>Versions</button>
       {target.type === "project" ? <button className="ui-btn h-7" onClick={onOpenSettings}>Project settings</button> : <button className="ui-btn h-7" onClick={onOpenSettings}>Page settings</button>}
       <button className="ui-btn h-7" onClick={onSave} disabled={saveState === "saved" || saveState === "saving"}>Save draft</button>
-      <a className="ui-btn h-7" href={previewHref} target="_blank" rel="noreferrer">Preview ↗</a>
+      <Link className="ui-btn h-7" href={previewHref} target="_blank">Preview ↗</Link>
       {status.published && !status.hasUnpublished ? <a className="text-[11px] text-neutral-500 hover:underline" href={liveHref} target="_blank" rel="noreferrer">Live ↗</a> : null}
       <button className="ui-btn ui-btn-primary h-7" onClick={onPublish} disabled={publishing}>{publishing ? "Publishing…" : "Publish"}</button>
     </header>

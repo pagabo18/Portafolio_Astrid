@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { PhotoView } from "@/lib/photos/view";
-import { api, formatBytes, formatRatio } from "@/lib/client/api";
+import { formatBytes, formatRatio } from "@/lib/client/api";
+import { addPhotosToProject, appendBlock, bulkUpdatePhotos, createCategory, deletePhotos, replacePhotoFile, updatePhoto, useAdminState, views, type PhotoPatch } from "@/lib/content/admin";
+import { createBlock } from "@/lib/blocks/templates";
 import { UploadDropzone, UploadProgress, useUploader } from "./UploadDropzone";
 import { ConfirmDialog, Modal } from "./ui/Modal";
 import { Field, Toggle } from "./ui/Fields";
@@ -12,10 +14,15 @@ import { FocalPointEditor } from "./FocalPointEditor";
 type Cat = { id: string; name: string };
 type Proj = { id: string; name: string };
 
-export function PhotoLibrary({ initial, categories: initialCats, projects, years, openUpload }: { initial: PhotoView[]; categories: Cat[]; projects: Proj[]; years: string[]; openUpload: boolean }) {
-  const router = useRouter();
-  const [photos, setPhotos] = useState(initial);
-  const [cats, setCats] = useState(initialCats);
+export function PhotoLibrary() {
+  const params = useSearchParams();
+  const openUpload = params.get("upload") === "1";
+  const records = useAdminState((s) => s.photos);
+  const cats = useAdminState((s) => s.categories);
+  const projectEntries = useAdminState((s) => s.projects);
+  const photos = useMemo(() => views(records), [records]);
+  const projects = useMemo(() => projectEntries.map((p) => ({ id: p.file.id, name: p.draft.meta.name })), [projectEntries]);
+  const years = useMemo(() => [...new Set(records.map((p) => p.year).filter(Boolean))].sort().reverse(), [records]);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
   const [proj, setProj] = useState("");
@@ -31,10 +38,7 @@ export function PhotoLibrary({ initial, categories: initialCats, projects, years
   const [groupModal, setGroupModal] = useState(false);
   const lastClick = useRef<string | null>(null);
 
-  const uploader = useUploader((added) => {
-    setPhotos((p) => [...added, ...p]);
-    router.refresh();
-  });
+  const uploader = useUploader(() => {});
 
   const list = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -80,32 +84,26 @@ export function PhotoLibrary({ initial, categories: initialCats, projects, years
   async function bulk(action: string, value?: string | null) {
     const ids = selected;
     if (!ids.length) return;
+    const patches: Record<string, PhotoPatch> = {
+      hide: { hidden: true }, show: { hidden: false }, feature: { featured: true }, unfeature: { featured: false },
+      home: { showOnHome: true }, unhome: { showOnHome: false }, archive: { showInArchive: true }, unarchive: { showInArchive: false },
+    };
     if (action === "delete") return setConfirm({ ids });
-    const res = await api<PhotoView[] | { ok: true }>("/api/admin/photos/bulk", { method: "POST", json: { ids, action, value } });
-    if (Array.isArray(res)) setPhotos((ps) => ps.map((p) => res.find((r) => r.id === p.id) ?? p));
-    else if (action === "add-to-project") {
-      /* membership only */
-    }
-    router.refresh();
+    if (action === "category") return bulkUpdatePhotos(ids, { categoryId: value ?? null });
+    if (action === "add-to-project" && value) return addPhotosToProject(value, ids);
+    if (patches[action]) await bulkUpdatePhotos(ids, patches[action]);
   }
 
   async function doDelete(ids: string[]) {
-    await api("/api/admin/photos/bulk", { method: "POST", json: { ids, action: "delete" } });
-    setPhotos((ps) => ps.filter((p) => !ids.includes(p.id)));
+    await deletePhotos(ids);
     setSelected((s) => s.filter((x) => !ids.includes(x)));
     if (open && ids.includes(open)) setOpen(null);
-    router.refresh();
-  }
-
-  function updateLocal(p: PhotoView) {
-    setPhotos((ps) => ps.map((x) => (x.id === p.id ? p : x)));
   }
 
   async function addCategory() {
     const name = window.prompt("New category name");
     if (!name?.trim()) return;
-    const c = await api<Cat>("/api/admin/categories", { method: "POST", json: { name } });
-    setCats((cs) => (cs.some((x) => x.id === c.id) ? cs : [...cs, c]));
+    await createCategory(name);
   }
 
   useEffect(() => {
@@ -246,7 +244,6 @@ export function PhotoLibrary({ initial, categories: initialCats, projects, years
           categories={cats}
           projects={projects}
           onClose={() => setOpen(null)}
-          onChange={updateLocal}
           onDelete={() => setConfirm({ ids: [openPhoto.id] })}
         />
       ) : null}
@@ -255,7 +252,7 @@ export function PhotoLibrary({ initial, categories: initialCats, projects, years
         open={!!confirm}
         onClose={() => setConfirm(null)}
         title={`Delete ${confirm?.ids.length === 1 ? "photograph" : `${confirm?.ids.length} photographs`}?`}
-        message="The original and every generated variant are removed from storage. Layouts that use them will show an empty slot. Use “Hide” if you only want them off the site."
+        message="The original and its previews are removed from the repository. Layouts that use them will show an empty slot. Use “Hide” if you only want them off the site."
         onConfirm={async () => { if (confirm) await doDelete(confirm.ids); }}
       />
       <CreateGroupModal open={groupModal} onClose={() => setGroupModal(false)} projects={projects} photoIds={selected} />
@@ -266,46 +263,41 @@ export function PhotoLibrary({ initial, categories: initialCats, projects, years
 
 /* ------------------------------------------------------------------ */
 
-function PhotoDetails({ photo, categories, projects, onClose, onChange, onDelete }: { photo: PhotoView; categories: Cat[]; projects: Proj[]; onClose: () => void; onChange: (p: PhotoView) => void; onDelete: () => void }) {
+function PhotoDetails({ photo, categories, projects, onClose, onDelete }: { photo: PhotoView; categories: Cat[]; projects: Proj[]; onClose: () => void; onDelete: () => void }) {
   const [p, setP] = useState(photo);
   const [state, setState] = useState<"idle" | "saving" | "saved">("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pending = useRef<PhotoPatch>({});
   const fileRef = useRef<HTMLInputElement>(null);
   const [replacing, setReplacing] = useState(false);
 
-  function patch(partial: Partial<PhotoView>) {
-    const next = { ...p, ...partial };
-    setP(next);
-    onChange(next);
+  function patch(partial: PhotoPatch) {
+    setP((cur) => ({ ...cur, ...(partial as Partial<PhotoView>) }));
+    pending.current = { ...pending.current, ...partial };
     setState("saving");
     if (timer.current) clearTimeout(timer.current);
+    // group edits into one commit
     timer.current = setTimeout(async () => {
-      const saved = await api<PhotoView>(`/api/admin/photos/${p.id}`, { method: "PATCH", json: partial });
-      setP((cur) => ({ ...cur, categoryName: saved.categoryName, altSuggested: saved.altSuggested }));
-      onChange({ ...next, categoryName: saved.categoryName, altSuggested: saved.altSuggested });
+      const toSave = pending.current;
+      pending.current = {};
+      const [saved] = await updatePhoto(p.id, toSave);
+      if (saved) setP((cur) => ({ ...cur, categoryName: saved.categoryName, altSuggested: saved.altSuggested }));
       setState("saved");
       setTimeout(() => setState("idle"), 1500);
-    }, 500);
+    }, 1200);
   }
 
   async function replace(file: File) {
     setReplacing(true);
-    const fd = new FormData();
-    fd.append("file", file);
     try {
-      const res = await fetch(`/api/admin/photos/${p.id}/replace`, { method: "POST", body: fd });
-      const saved = (await res.json()) as PhotoView;
-      if (res.ok) {
-        setP(saved);
-        onChange(saved);
-      }
+      setP(await replacePhotoFile(p.id, file));
     } finally {
       setReplacing(false);
     }
   }
 
-  const input = (k: keyof PhotoView, placeholder?: string) => (
-    <input className="ui-input" value={String(p[k] ?? "")} placeholder={placeholder} onChange={(e) => patch({ [k]: e.target.value } as Partial<PhotoView>)} />
+  const input = (k: keyof PhotoPatch & keyof PhotoView, placeholder?: string) => (
+    <input className="ui-input" value={String(p[k] ?? "")} placeholder={placeholder} onChange={(e) => patch({ [k]: e.target.value } as PhotoPatch)} />
   );
 
   return (
@@ -324,12 +316,11 @@ function PhotoDetails({ photo, categories, projects, onClose, onChange, onDelete
           <dt className="text-neutral-400">Dimensions</dt><dd>{p.width} × {p.height}</dd>
           <dt className="text-neutral-400">Aspect ratio</dt><dd>{formatRatio(p.aspectRatio)} · {p.orientation}</dd>
           <dt className="text-neutral-400">Original</dt><dd>{formatBytes(p.bytes)} · {p.mime.replace("image/", "")}</dd>
-          <dt className="text-neutral-400">Web variants</dt><dd>{p.sources.avif.length} AVIF · {p.sources.webp.length} WebP</dd>
           <dt className="text-neutral-400">Uploaded</dt><dd>{new Date(p.createdAt).toLocaleDateString()}</dd>
         </dl>
 
         <div className="flex gap-2">
-          <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && replace(e.target.files[0])} />
+          <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden onChange={(e) => e.target.files?.[0] && replace(e.target.files[0])} />
           <button className="ui-btn" onClick={() => fileRef.current?.click()} disabled={replacing}>{replacing ? "Replacing…" : "Replace file"}</button>
           <a className="ui-btn" href={p.originalUrl} target="_blank" rel="noreferrer">Original ↗</a>
           <button className="ui-btn ui-btn-danger ml-auto" onClick={onDelete}>Delete…</button>
@@ -393,11 +384,8 @@ function CreateGroupModal({ open, onClose, projects, photoIds }: { open: boolean
     if (!project) return;
     setBusy(true);
     try {
-      const { createBlock } = await import("@/lib/blocks/templates");
-      const p = await api<{ draft: { version: 1; blocks: unknown[] } }>(`/api/admin/projects/${project}`);
-      const block = createBlock("image-group", { photoIds, layout });
-      await api(`/api/admin/projects/${project}/draft`, { method: "PUT", json: { document: { version: 1, blocks: [...p.draft.blocks, block] } } });
-      router.push(`/admin/projects/${project}`);
+      await appendBlock(project, createBlock("image-group", { photoIds, layout }));
+      router.push(`/admin/editor?type=project&id=${project}`);
     } finally {
       setBusy(false);
     }

@@ -1,10 +1,8 @@
-import { getPublishedPage } from "@/lib/data/pages";
-import { buildRenderData } from "@/lib/data/render";
+import { buildRenderData, loadPage } from "@/lib/content/server";
 import { EditorialRoot } from "@/components/editorial/EditorialRoot";
 
-export default async function HomePage() {
-  const page = await getPublishedPage("home");
+export default function HomePage() {
+  const page = loadPage("home");
   if (!page) return null;
-  const data = await buildRenderData(page.document);
-  return <EditorialRoot document={page.document} data={data} />;
+  return <EditorialRoot document={page.document} data={buildRenderData(page.document)} />;
 }

@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { api } from "@/lib/client/api";
+import { useRouter } from "next/navigation";
 import type { PhotoView } from "@/lib/photos/view";
+import { deleteProject, setProjectPhotos, updatePageMeta, updateProjectFlags, updateProjectMeta } from "@/lib/content/admin";
+import type { PageSlug } from "@/lib/content/types";
+import { withBase } from "@/lib/content/paths";
 import { Modal, ConfirmDialog } from "@/components/admin/ui/Modal";
 import { Field, Toggle } from "@/components/admin/ui/Fields";
 import { useEditor } from "./store";
 import type { EditorTarget } from "./types";
-import { useRouter } from "next/navigation";
 
 type ProjectMeta = Extract<EditorTarget, { type: "project" }>["meta"];
 type PageMeta = Extract<EditorTarget, { type: "page" }>["meta"];
@@ -41,9 +43,13 @@ export function ProjectSettingsModal({
   async function save() {
     setBusy(true);
     try {
-      const saved = await api<{ slug: string; name: string; status: string; hasUnpublished: boolean }>(`/api/admin/projects/${target.id}`, { method: "PATCH", json: m });
-      if (photoIds.join() !== target.photoIds.join()) await api(`/api/admin/projects/${target.id}/photos`, { method: "PUT", json: { photoIds } });
-      onSaved({ meta: { ...m, slug: saved.slug }, name: saved.name, slug: saved.slug, photoIds, hasUnpublished: saved.hasUnpublished });
+      const { featured, showOnHome, showInArchive, ...meta } = m;
+      const d = await updateProjectMeta(target.id, meta);
+      if (featured !== target.meta.featured || showOnHome !== target.meta.showOnHome || showInArchive !== target.meta.showInArchive) {
+        await updateProjectFlags(target.id, { featured, showOnHome, showInArchive });
+      }
+      if (photoIds.join() !== target.photoIds.join()) await setProjectPhotos(target.id, photoIds);
+      onSaved({ meta: { ...d.meta, featured, showOnHome, showInArchive }, name: d.meta.name, slug: d.meta.slug, photoIds, hasUnpublished: true });
       onClose();
     } finally {
       setBusy(false);
@@ -51,11 +57,11 @@ export function ProjectSettingsModal({
   }
 
   async function remove() {
-    await api(`/api/admin/projects/${target.id}`, { method: "DELETE" });
+    await deleteProject(target.id);
     router.push("/admin/projects");
   }
 
-  const previewUrl = typeof window !== "undefined" ? `${window.location.origin}/preview/project/${target.slug}?token=${target.previewToken}` : "";
+  const previewUrl = typeof window !== "undefined" ? `${window.location.origin}${withBase(`/preview/?type=project&id=${target.id}`)}` : "";
 
   return (
     <>
@@ -107,7 +113,7 @@ export function ProjectSettingsModal({
                 <Toggle label="Show in archive" checked={m.showInArchive} onChange={(v) => setM({ ...m, showInArchive: v })} />
               </div>
               <div className="col-span-2 mt-3">
-                <Field label="Private preview URL" hint="Share this link to review the draft before publishing.">
+                <Field label="Draft preview" hint="Opens the draft with your admin session (drafts are not public until you publish).">
                   <input className="ui-input" readOnly value={previewUrl} onFocus={(e) => e.target.select()} />
                 </Field>
               </div>
@@ -158,7 +164,7 @@ export function PageSettingsModal({ open, onClose, target, onSaved, onPickPhotos
   async function save() {
     setBusy(true);
     try {
-      await api(`/api/admin/pages/${target.id}`, { method: "PATCH", json: m });
+      await updatePageMeta(target.id as PageSlug, m);
       onSaved({ meta: m, name: m.title, hasUnpublished: true });
       onClose();
     } finally {
@@ -177,7 +183,7 @@ export function PageSettingsModal({ open, onClose, target, onSaved, onPickPhotos
             <button className="ui-btn" onClick={() => onPickPhotos({ multiple: false, onPick: (p) => { mergePhotos(p); setM((x) => ({ ...x, ogPhotoId: p[0].id })); } })}>Choose</button>
           </div>
         </Field>
-        <p className="text-[11px] text-neutral-500">Preview URL: <code className="text-[10.5px]">/preview/page/{target.slug}?token={target.previewToken}</code></p>
+        <p className="text-[11px] text-neutral-500">Publish from the top bar to make changes live.</p>
       </div>
     </Modal>
   );

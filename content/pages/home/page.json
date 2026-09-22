@@ -1,0 +1,46 @@
+{
+  "slug": "home",
+  "published": {
+    "meta": {
+      "title": "Home",
+      "seoTitle": "",
+      "seoDescription": "",
+      "ogPhotoId": null
+    },
+    "document": {
+      "version": 1,
+      "blocks": [
+        {
+          "id": "b_46eb4892",
+          "visible": true,
+          "spacingTop": "xl",
+          "spacingBottom": "m",
+          "background": "default",
+          "label": "",
+          "type": "chapter",
+          "number": "",
+          "title": "Selected work",
+          "subtitle": "",
+          "align": "left"
+        },
+        {
+          "id": "b_ccde7543",
+          "visible": true,
+          "spacingTop": "m",
+          "spacingBottom": "m",
+          "background": "default",
+          "label": "",
+          "type": "project-list",
+          "source": "home",
+          "projectIds": [],
+          "style": "editorial",
+          "showMeta": true,
+          "limit": 0
+        }
+      ]
+    },
+    "publishedAt": "2026-01-01T00:00:00.000Z"
+  },
+  "publishedAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z"
+}

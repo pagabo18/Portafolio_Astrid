@@ -5,7 +5,7 @@ import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type D
 import { SortableContext, arrayMove, rectSortingStrategy, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { PhotoView } from "@/lib/photos/view";
-import { api } from "@/lib/client/api";
+import { setArchiveOrder, updatePhoto } from "@/lib/content/admin";
 import { Modal } from "@/components/admin/ui/Modal";
 
 /** Archive settings: drag photographs to set the manual order; toggle visibility. */
@@ -18,18 +18,18 @@ export function ArchiveOrderModal({ open, onClose, photos, onChange }: { open: b
     const next = arrayMove(list, list.findIndex((p) => p.id === active.id), list.findIndex((p) => p.id === over.id)).map((p, i) => ({ ...p, archiveOrder: i }));
     setList(next);
     onChange(next);
-    await api("/api/admin/photos/order", { method: "PUT", json: { ids: next.map((p) => p.id) } });
+    await setArchiveOrder(next.map((p) => p.id));
   }
   async function toggle(p: PhotoView) {
     const next = list.map((x) => (x.id === p.id ? { ...x, showInArchive: !x.showInArchive } : x));
     setList(next);
     onChange(next);
-    await api(`/api/admin/photos/${p.id}`, { method: "PATCH", json: { showInArchive: !p.showInArchive } });
+    await updatePhoto(p.id, { showInArchive: !p.showInArchive });
   }
   return (
     <Modal open={open} onClose={onClose} title="Archive · order & visibility" width="max-w-4xl" footer={<button className="ui-btn ui-btn-primary" onClick={onClose}>Done</button>}>
       <div className="p-4">
-        <p className="mb-3 text-[11.5px] text-neutral-500">Drag to set the manual order. Click the eye to include or exclude a photograph. Changes apply immediately to the archive dataset (publish the page to make layout changes live).</p>
+        <p className="mb-3 text-[11.5px] text-neutral-500">Drag to set the manual order. Click the eye to include or exclude a photograph. Order and visibility are saved immediately and go live with the next deploy.</p>
         <DndContext id="archive-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={list.map((p) => p.id)} strategy={rectSortingStrategy}>
             <div className="grid grid-cols-8 gap-2">

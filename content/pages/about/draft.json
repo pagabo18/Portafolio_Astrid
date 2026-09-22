@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "About",
+    "seoTitle": "",
+    "seoDescription": "",
+    "ogPhotoId": null
+  },
+  "document": {
+    "version": 1,
+    "blocks": [
+      {
+        "id": "b_80ea4b5e",
+        "visible": true,
+        "spacingTop": "m",
+        "spacingBottom": "m",
+        "background": "default",
+        "label": "",
+        "type": "text",
+        "variant": "lead",
+        "content": "Photographer. Write a short biography here from the admin.",
+        "align": "left",
+        "span": 7,
+        "start": 1
+      }
+    ]
+  },
+  "draftUpdatedAt": "2026-01-01T00:00:00.000Z"
+}
