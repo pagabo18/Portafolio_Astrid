@@ -41,6 +41,8 @@ site. No servers, no database service, no credit card, nothing that pauses.
 1. **Create the repository** from this code (public — GitHub Pages is free
    for public repositories). Push to the `main` branch.
 2. **Settings → Pages → Build and deployment → Source: “GitHub Actions”.**
+   This single click creates the Pages site; the workflow cannot create it
+   on its own.
 3. **Create an access token** you will use to sign in to the admin:
    GitHub → Settings → Developer settings → Personal access tokens →
    *Fine-grained tokens* → Generate. Repository access: *Only select
