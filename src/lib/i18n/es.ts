@@ -398,6 +398,7 @@ export const ES: Record<string, string> = {
   "Saved — deploys with the next build": "Guardado — se publica en la siguiente compilación",
   "Could not save": "No se pudo guardar",
   Infrastructure: "Infraestructura",
+  "Cover, category and SEO live in Project settings, in the top bar.": "La portada, la categoría y el SEO están en Ajustes del proyecto, en la barra de arriba.",
   Watermark: "Marca de agua",
   "Stamp a watermark on the photographs the site serves": "Poner marca de agua a las fotos que muestra la web",
   Logo: "Logo",
@@ -426,4 +427,40 @@ export const ES: Record<string, string> = {
     "El grupo se añade como bloque al borrador del proyecto. Puedes recolocarlo en el editor.",
   "Drag to set the manual order. Click the eye to include or exclude a photograph. Order and visibility are saved immediately and go live with the next deploy.":
     "Arrastra para fijar el orden manual. Pulsa el círculo para incluir o excluir una fotografía. El orden y la visibilidad se guardan al momento y salen publicados en la siguiente compilación.",
+
+  // --- inspector leftovers ----------------------------------------------
+  Middle: "Centro vertical",
+  "For this photo everywhere": "Para esta foto en todas partes",
+  "Only this placement": "Solo en esta colocación",
+  "The focal point decides which part of the image stays visible when a layout crops it. Only two numbers are stored; the original file is untouched.":
+    "El punto de interés decide qué parte de la imagen se conserva cuando una maquetación la recorta. Solo se guardan dos números; el archivo original no se toca.",
+  "Click the photograph in the canvas to edit its size, position and caption.":
+    "Pulsa la fotografía en el lienzo para cambiar su tamaño, su posición y su pie de foto.",
+  "Order follows the Projects list (drag to reorder there). Only published projects appear.":
+    "El orden sigue la lista de Proyectos (arrástralos allí para reordenar). Solo aparecen los proyectos publicados.",
+  "Which photos appear is controlled per photo (“Show in archive”) in the library. Manual order: Archive settings.":
+    "Qué fotos aparecen se decide foto a foto (“Mostrar en el archivo”) en la biblioteca. Orden manual: ajustes de Archivo.",
+
+  // --- palette names -----------------------------------------------------
+  Paper: "Papel",
+  "Off white": "Blanco roto",
+  Sand: "Arena",
+  Linen: "Lino",
+  Mist: "Niebla",
+  Stone: "Piedra",
+  Clay: "Barro",
+  Sage: "Salvia",
+  Slate: "Pizarra",
+  Ink: "Tinta",
+  Charcoal: "Carbón",
+  Espresso: "Café",
+  Midnight: "Medianoche",
+  Forest: "Bosque",
+  Wine: "Vino",
+  "Soft ink": "Tinta suave",
+  Muted: "Apagado",
+  Cream: "Crema",
+  Rust: "Óxido",
+  Olive: "Oliva",
+  Navy: "Marino",
 };

@@ -172,6 +172,30 @@ export function Editor(props: EditorProps) {
   /* ---------------- helpers ---------------- */
   const requestPhotos = useCallback((req: PickReq) => setPick(req), []);
 
+  /**
+   * Editing the project's name, year, location or description from the
+   * header block. The canvas updates as you type; the commit is debounced so
+   * a sentence is one save, not one per keystroke.
+   */
+  const metaTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const metaPending = useRef<Record<string, string>>({});
+  const onProjectMeta = useCallback(
+    (patch: Record<string, string>) => {
+      setTarget((cur) => (cur.type === "project" ? { ...cur, ...(patch.name ? { name: patch.name } : {}), meta: { ...cur.meta, ...patch } } : cur));
+      setStatus((s) => ({ ...s, hasUnpublished: true }));
+      if (targetType !== "project") return;
+      metaPending.current = { ...metaPending.current, ...patch };
+      if (metaTimer.current) clearTimeout(metaTimer.current);
+      metaTimer.current = setTimeout(async () => {
+        const toSave = metaPending.current;
+        metaPending.current = {};
+        const d = await updateProjectMeta(targetId, toSave);
+        setTarget((cur) => (cur.type === "project" ? { ...cur, slug: d.meta.slug, meta: { ...cur.meta, slug: d.meta.slug } } : cur));
+      }, 1200);
+    },
+    [targetType, targetId],
+  );
+
   function onInsert(block: Block, photos: PhotoView[]) {
     if (photos.length) mergePhotos(photos);
     insertBlock(block, addAfter === false ? null : addAfter);
@@ -215,7 +239,7 @@ export function Editor(props: EditorProps) {
           <Canvas data={{ project: projectHeader, projects: props.projects, archivePhotos: archivePhotos.filter((p) => p.showInArchive), categories: props.categories, years: props.years, projectLinkMode: "none" }} />
         </div>
         <aside className="w-[340px] shrink-0 overflow-hidden border-l border-neutral-200 bg-white">
-          <Inspector onPickPhotos={requestPhotos} scope={scope} />
+          <Inspector onPickPhotos={requestPhotos} scope={scope} projectMeta={target.type === "project" ? target.meta : undefined} onProjectMeta={onProjectMeta} />
         </aside>
       </div>
 

@@ -14,7 +14,19 @@ import { Modal } from "@/components/admin/ui/Modal";
 import { findSelected, useEditor } from "./store";
 import { autoMobile, autoTablet } from "@/components/editorial/Slot";
 
-export function Inspector({ onPickPhotos, scope }: { onPickPhotos: (opts: { multiple: boolean; onPick: (p: PhotoView[]) => void }) => void; scope: "project" | "page" }) {
+export type ProjectMetaFields = { name: string; year: string; location: string; description: string };
+
+export function Inspector({
+  onPickPhotos,
+  scope,
+  projectMeta,
+  onProjectMeta,
+}: {
+  onPickPhotos: (opts: { multiple: boolean; onPick: (p: PhotoView[]) => void }) => void;
+  scope: "project" | "page";
+  projectMeta?: ProjectMetaFields;
+  onProjectMeta?: (patch: Partial<ProjectMetaFields>) => void;
+}) {
   const t = useT();
   const doc = useEditor((s) => s.doc);
   const selection = useEditor((s) => s.selection);
@@ -41,7 +53,7 @@ export function Inspector({ onPickPhotos, scope }: { onPickPhotos: (opts: { mult
     <div className="flex h-full flex-col">
       <div className="flex-1 overflow-y-auto">
         {slot ? <SlotInspector block={block} slot={slot} onPickPhotos={onPickPhotos} /> : null}
-        <BlockInspector key={`${block.id}-${slot ? "slot" : "block"}`} block={block} onPickPhotos={onPickPhotos} collapsed={!!slot} scope={scope} />
+        <BlockInspector key={`${block.id}-${slot ? "slot" : "block"}`} block={block} onPickPhotos={onPickPhotos} collapsed={!!slot} scope={scope} projectMeta={projectMeta} onProjectMeta={onProjectMeta} />
       </div>
     </div>
   );
@@ -236,17 +248,18 @@ function SlotInspector({ block, slot, onPickPhotos }: { block: Block; slot: Imag
 }
 
 function FocalModal({ open, onClose, photo, slot, onSlot, onPhoto }: { open: boolean; onClose: () => void; photo: PhotoView; slot: ImageSlot; onSlot: (f: { x: number; y: number } | null) => void; onPhoto: (x: number, y: number) => void }) {
+  const t = useT();
   const [mode, setMode] = useState<"photo" | "slot">(slot.focal ? "slot" : "photo");
   const x = mode === "slot" ? slot.focal?.x ?? photo.focalX : photo.focalX;
   const y = mode === "slot" ? slot.focal?.y ?? photo.focalY : photo.focalY;
   return (
-    <Modal open={open} onClose={onClose} title="Focal point" width="max-w-lg" footer={<button className="ui-btn ui-btn-primary" onClick={onClose}>Done</button>}>
+    <Modal open={open} onClose={onClose} title={t("Focal point")} width="max-w-lg" footer={<button className="ui-btn ui-btn-primary" onClick={onClose}>{t("Done")}</button>}>
       <div className="p-5">
         <div className="mb-3 flex items-center justify-between">
-          <Segmented value={mode} onChange={(m) => { setMode(m); if (m === "photo") onSlot(null); }} options={[{ value: "photo", label: "For this photo everywhere" }, { value: "slot", label: "Only this placement" }]} />
+          <Segmented value={mode} onChange={(m) => { setMode(m); if (m === "photo") onSlot(null); }} options={[{ value: "photo", label: t("For this photo everywhere") }, { value: "slot", label: t("Only this placement") }]} />
         </div>
         <FocalPointEditor photo={photo} x={x} y={y} aspectPreview={slot.aspect !== "auto" ? slot.aspect : "16:9"} onChange={(nx, ny) => (mode === "slot" ? onSlot({ x: nx, y: ny }) : onPhoto(nx, ny))} />
-        <p className="mt-3 text-[11px] text-neutral-500">The focal point decides which part of the image stays visible when a layout crops it. Only two numbers are stored; the original file is untouched.</p>
+        <p className="mt-3 text-[11px] text-neutral-500">{t("The focal point decides which part of the image stays visible when a layout crops it. Only two numbers are stored; the original file is untouched.")}</p>
       </div>
     </Modal>
   );
@@ -294,7 +307,7 @@ function SpacingSelect({ value, onChange }: { value: Spacing; onChange: (v: Spac
   return <Segmented value={value} onChange={onChange} size="sm" options={SPACING.map((s) => ({ value: s, label: s === "none" ? t("None") : spacingLabel[s] }))} />;
 }
 
-function BlockInspector({ block, onPickPhotos, collapsed, scope }: { block: Block; onPickPhotos: (opts: { multiple: boolean; onPick: (p: PhotoView[]) => void }) => void; collapsed: boolean; scope: "project" | "page" }) {
+function BlockInspector({ block, onPickPhotos, collapsed, scope, projectMeta, onProjectMeta }: { block: Block; onPickPhotos: (opts: { multiple: boolean; onPick: (p: PhotoView[]) => void }) => void; collapsed: boolean; scope: "project" | "page"; projectMeta?: ProjectMetaFields; onProjectMeta?: (patch: Partial<ProjectMetaFields>) => void }) {
   const t = useT();
   const updateBlock = useEditor((s) => s.updateBlock);
   const removeBlock = useEditor((s) => s.removeBlock);
@@ -312,7 +325,7 @@ function BlockInspector({ block, onPickPhotos, collapsed, scope }: { block: Bloc
       </button>
       {open ? (
         <>
-          <TypeFields block={block} onPickPhotos={onPickPhotos} />
+          <TypeFields block={block} onPickPhotos={onPickPhotos} projectMeta={projectMeta} onProjectMeta={onProjectMeta} />
 
           <div className="mt-3 border-t border-neutral-100 pt-3">
             <Field label={t("Top spacing")}><SpacingSelect value={block.spacingTop} onChange={(v) => set({ spacingTop: v })} /></Field>
@@ -379,7 +392,30 @@ function TypographyFields({ block, set }: { block: Block & { font?: string; weig
   );
 }
 
-function TypeFields({ block, onPickPhotos }: { block: Block; onPickPhotos: (opts: { multiple: boolean; onPick: (p: PhotoView[]) => void }) => void }) {
+/** Name, year, location and description of the project, edited in place. */
+function ProjectMetaFieldsEditor({ meta, onChange }: { meta: ProjectMetaFields; onChange: (patch: Partial<ProjectMetaFields>) => void }) {
+  const t = useT();
+  return (
+    <>
+      <Field label={t("Project name")}>
+        <input className="ui-input" value={meta.name} onChange={(e) => onChange({ name: e.target.value })} />
+      </Field>
+      <div className="grid grid-cols-2 gap-3">
+        <Field label={t("Year")}>
+          <input className="ui-input" value={meta.year} onChange={(e) => onChange({ year: e.target.value })} />
+        </Field>
+        <Field label={t("Location")}>
+          <input className="ui-input" value={meta.location} onChange={(e) => onChange({ location: e.target.value })} />
+        </Field>
+      </div>
+      <Field label={t("Description")}>
+        <textarea className="ui-input min-h-24" value={meta.description} onChange={(e) => onChange({ description: e.target.value })} />
+      </Field>
+    </>
+  );
+}
+
+function TypeFields({ block, onPickPhotos, projectMeta, onProjectMeta }: { block: Block; onPickPhotos: (opts: { multiple: boolean; onPick: (p: PhotoView[]) => void }) => void; projectMeta?: ProjectMetaFields; onProjectMeta?: (patch: Partial<ProjectMetaFields>) => void }) {
   const t = useT();
   const updateBlock = useEditor((s) => s.updateBlock);
   const mergePhotos = useEditor((s) => s.mergePhotos);
@@ -402,7 +438,7 @@ function TypeFields({ block, onPickPhotos }: { block: Block; onPickPhotos: (opts
           </Field>
           <LayoutPicker open={layouts} onClose={() => setLayouts(false)} kind="single" current={block.layout} onPick={(l) => updateBlock(block.id, (b: Block) => (b.type === "image" ? applySingleLayout(b, l.id as never) : b))} />
           {!block.image.photoId ? <button className="ui-btn w-full" onClick={() => onPickPhotos({ multiple: false, onPick: (p) => { mergePhotos(p); updateBlock(block.id, (b: Block) => (b.type === "image" ? { ...b, image: { ...b.image, photoId: p[0].id } } : b)); } })}>{t("Select photo")}</button> : null}
-          <p className="text-[10.5px] text-neutral-400">Click the photograph in the canvas to edit its size, position and caption.</p>
+          <p className="text-[10.5px] text-neutral-400">{t("Click the photograph in the canvas to edit its size, position and caption.")}</p>
         </>
       );
     case "image-group":
@@ -467,29 +503,31 @@ function TypeFields({ block, onPickPhotos }: { block: Block; onPickPhotos: (opts
           <Field label={t("Title")}><input className="ui-input" value={block.title} onChange={(e) => set({ title: e.target.value } as never, `t-${block.id}`)} /></Field>
           <Field label={t("Subtitle")}><input className="ui-input" value={block.subtitle} onChange={(e) => set({ subtitle: e.target.value } as never, `s-${block.id}`)} /></Field>
           <TypographyFields block={block} set={set} />
-          <Field label={t("Align")}><Segmented value={block.align} onChange={(v) => set({ align: v } as never)} options={[{ value: "left", label: "Left" }, { value: "center", label: "Center" }, { value: "right", label: "Right" }]} /></Field>
+          <Field label={t("Align")}><Segmented value={block.align} onChange={(v) => set({ align: v } as never)} options={[{ value: "left", label: t("Left") }, { value: "center", label: t("Center") }, { value: "right", label: t("Right") }]} /></Field>
         </>
       );
     case "project-header":
       return (
         <>
+          {projectMeta && onProjectMeta ? <ProjectMetaFieldsEditor meta={projectMeta} onChange={onProjectMeta} /> : null}
+          <div className="my-3 border-t border-neutral-100" />
           <TypographyFields block={block} set={set} />
           <Toggle label={t("Show index number")} checked={block.showIndex} onChange={(v) => set({ showIndex: v } as never)} />
           <Toggle label={t("Show title")} checked={block.showTitle} onChange={(v) => set({ showTitle: v } as never)} />
           <Toggle label={t("Show year / location / category")} checked={block.showMeta} onChange={(v) => set({ showMeta: v } as never)} />
           <Toggle label={t("Show description")} checked={block.showDescription} onChange={(v) => set({ showDescription: v } as never)} />
-          <Field label="Align"><Segmented value={block.align} onChange={(v) => set({ align: v } as never)} options={[{ value: "left", label: "Left" }, { value: "center", label: "Center" }, { value: "right", label: "Right" }]} /></Field>
-          <p className="text-[10.5px] text-neutral-400">Title, year, location and description are edited in Project settings (top bar).</p>
+          <Field label={t("Align")}><Segmented value={block.align} onChange={(v) => set({ align: v } as never)} options={[{ value: "left", label: t("Left") }, { value: "center", label: t("Center") }, { value: "right", label: t("Right") }]} /></Field>
+          <p className="text-[10.5px] text-neutral-400">{t("Cover, category and SEO live in Project settings, in the top bar.")}</p>
         </>
       );
     case "project-list":
       return (
         <>
           <Field label={t("Source")}><Segmented value={block.source} onChange={(v) => set({ source: v } as never)} options={[{ value: "home", label: t("Show on home") }, { value: "featured", label: t("Featured") }, { value: "all", label: t("All") }]} /></Field>
-          <Field label="Style"><Segmented value={block.style} onChange={(v) => set({ style: v } as never)} options={[{ value: "editorial", label: t("Editorial") }, { value: "grid", label: t("Grid") }, { value: "index", label: t("Index") }]} /></Field>
+          <Field label={t("Style")}><Segmented value={block.style} onChange={(v) => set({ style: v } as never)} options={[{ value: "editorial", label: t("Editorial") }, { value: "grid", label: t("Grid") }, { value: "index", label: t("Index") }]} /></Field>
           <Field label={t("Limit (0 = all)")}><Stepper value={block.limit} min={0} max={50} onChange={(v) => set({ limit: v } as never)} /></Field>
           <Toggle label={t("Show year / location")} checked={block.showMeta} onChange={(v) => set({ showMeta: v } as never)} />
-          <p className="text-[10.5px] text-neutral-400">Order follows the Projects list (drag to reorder there). Only published projects appear.</p>
+          <p className="text-[10.5px] text-neutral-400">{t("Order follows the Projects list (drag to reorder there). Only published projects appear.")}</p>
         </>
       );
     case "photo-archive":
@@ -501,14 +539,14 @@ function TypeFields({ block, onPickPhotos }: { block: Block; onPickPhotos: (opts
               <option value="manual">{t("Manual (archive order)")}</option>
               <option value="newest">{t("Newest first")}</option>
               <option value="oldest">{t("Oldest first")}</option>
-              <option value="year-desc">Year ↓</option>
-              <option value="year-asc">Year ↑</option>
+              <option value="year-desc">{t("Year")} ↓</option>
+              <option value="year-asc">{t("Year")} ↑</option>
               <option value="title">{t("Title")}</option>
             </select>
           </Field>
           <Toggle label={t("Show category / year filters")} checked={block.showFilters} onChange={(v) => set({ showFilters: v } as never)} />
           <Toggle label={t("Show captions")} checked={block.showCaptions} onChange={(v) => set({ showCaptions: v } as never)} />
-          <p className="text-[10.5px] text-neutral-400">Which photos appear is controlled per photo (“Show in archive”) in the library. Manual order: Archive settings.</p>
+          <p className="text-[10.5px] text-neutral-400">{t("Which photos appear is controlled per photo (“Show in archive”) in the library. Manual order: Archive settings.")}</p>
         </>
       );
   }
