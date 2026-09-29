@@ -74,82 +74,6 @@
         }
       },
       {
-        "id": "b_b480eed7",
-        "visible": true,
-        "spacingTop": "l",
-        "spacingBottom": "xl",
-        "background": "default",
-        "textColor": "auto",
-        "label": "",
-        "type": "image-group",
-        "layout": "two-columns",
-        "gap": "m",
-        "images": [
-          {
-            "id": "s_ea0fe07e",
-            "photoId": "ph_cqv6kk4d9z",
-            "span": 5,
-            "start": 1,
-            "anchorX": "custom",
-            "offsetX": 0,
-            "offsetY": 0,
-            "vAlign": "top",
-            "fit": "contain",
-            "aspect": "auto",
-            "rotation": 0,
-            "scale": 1,
-            "overlap": false,
-            "zIndex": 0,
-            "fullscreen": true,
-            "visible": true,
-            "caption": {
-              "show": false,
-              "title": true,
-              "location": true,
-              "year": true,
-              "index": false,
-              "caption": true,
-              "metadata": false,
-              "text": "",
-              "align": "left"
-            },
-            "focal": null,
-            "responsive": {}
-          },
-          {
-            "id": "s_f653607d",
-            "photoId": "ph_1rm2h8e8hl",
-            "span": 5,
-            "start": 7,
-            "anchorX": "custom",
-            "offsetX": 0,
-            "offsetY": -4,
-            "vAlign": "top",
-            "fit": "contain",
-            "aspect": "auto",
-            "rotation": 0,
-            "scale": 1,
-            "overlap": false,
-            "zIndex": 0,
-            "fullscreen": true,
-            "visible": true,
-            "caption": {
-              "show": false,
-              "title": true,
-              "location": true,
-              "year": true,
-              "index": false,
-              "caption": true,
-              "metadata": false,
-              "text": "",
-              "align": "left"
-            },
-            "focal": null,
-            "responsive": {}
-          }
-        ]
-      },
-      {
         "id": "b_6137111d",
         "visible": true,
         "spacingTop": "none",
@@ -440,5 +364,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T18:52:10.530Z"
+  "draftUpdatedAt": "2026-09-29T18:52:17.894Z"
 }
