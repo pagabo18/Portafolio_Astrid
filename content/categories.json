@@ -1,1 +1,22 @@
-{ "categories": [] }
+{
+  "categories": [
+    {
+      "id": "cat_landscape",
+      "name": "Landscape",
+      "slug": "landscape",
+      "sortOrder": 0
+    },
+    {
+      "id": "cat_automotive",
+      "name": "Automotive",
+      "slug": "automotive",
+      "sortOrder": 1
+    },
+    {
+      "id": "cat_portrait",
+      "name": "Portrait",
+      "slug": "portrait",
+      "sortOrder": 2
+    }
+  ]
+}
