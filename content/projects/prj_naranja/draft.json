@@ -133,7 +133,7 @@
           "id": "s_10398f89",
           "photoId": "ph_gtiv3jjyp4",
           "span": 4,
-          "start": 8,
+          "start": 9,
           "anchorX": "custom",
           "offsetX": 0,
           "offsetY": -4,
@@ -543,5 +543,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:42:16.426Z"
+  "draftUpdatedAt": "2026-09-29T19:42:18.425Z"
 }
