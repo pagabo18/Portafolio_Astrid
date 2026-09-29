@@ -48,7 +48,7 @@
           "start": 7,
           "anchorX": "custom",
           "offsetX": 0,
-          "offsetY": 1,
+          "offsetY": 4,
           "vAlign": "top",
           "fit": "contain",
           "aspect": "auto",
@@ -409,5 +409,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:33:29.811Z"
+  "draftUpdatedAt": "2026-09-29T19:39:06.557Z"
 }
