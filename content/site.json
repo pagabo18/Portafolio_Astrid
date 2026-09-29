@@ -22,11 +22,15 @@
     }
   ],
   "theme": "paper",
-  "uploadMaxPx": 4000,
+  "pageBackground": "linen",
+  "pageText": "",
+  "fontBody": "jost",
+  "fontHeading": "bodoni",
+  "adminLanguage": "es",
   "watermark": {
     "enabled": true,
     "mode": "text",
-    "text": "© ASTRID",
+    "text": "© SAM.PHOTO.ART",
     "family": "sans",
     "position": "bottom-right",
     "size": 2.6,
@@ -35,8 +39,5 @@
     "margin": 3.5,
     "minWidth": 700
   },
-  "fontBody": "jost",
-  "fontHeading": "bodoni",
-  "pageBackground": "linen",
-  "adminLanguage": "es"
+  "uploadMaxPx": 0
 }
