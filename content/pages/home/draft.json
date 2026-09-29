@@ -49,8 +49,8 @@
         "id": "b_6a4cc613",
         "visible": true,
         "spacingTop": "m",
-        "spacingBottom": "m",
-        "background": "default",
+        "spacingBottom": "xxl",
+        "background": "offwhite",
         "label": "",
         "type": "text-image",
         "order": "text-first",
@@ -90,5 +90,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T01:32:37.665Z"
+  "draftUpdatedAt": "2026-09-29T01:32:44.480Z"
 }
