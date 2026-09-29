@@ -96,7 +96,7 @@
               "title": true,
               "location": true,
               "year": true,
-              "index": false,
+              "index": true,
               "caption": true,
               "metadata": false,
               "text": "",
@@ -292,5 +292,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:49:52.391Z"
+  "draftUpdatedAt": "2026-09-29T19:49:54.983Z"
 }
