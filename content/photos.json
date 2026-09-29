@@ -1280,7 +1280,7 @@
       "camera": "",
       "lens": "",
       "categoryId": null,
-      "projectId": null,
+      "projectId": "prj_naranja",
       "hidden": false,
       "featured": false,
       "showOnHome": false,
@@ -1290,7 +1290,7 @@
       "focalY": 0.5403493071673393,
       "noWatermark": false,
       "createdAt": "2026-09-29T19:30:19.314Z",
-      "updatedAt": "2026-09-29T19:37:41.161Z"
+      "updatedAt": "2026-09-29T19:37:44.443Z"
     },
     {
       "id": "ph_t16a6nmveh",
