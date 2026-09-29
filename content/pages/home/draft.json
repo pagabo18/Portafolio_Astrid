@@ -11,15 +11,15 @@
       {
         "id": "b_46eb4892",
         "visible": true,
-        "spacingTop": "xl",
-        "spacingBottom": "m",
+        "spacingTop": "s",
+        "spacingBottom": "s",
         "background": "default",
         "label": "",
         "type": "chapter",
         "number": "",
         "title": "Selected work",
         "subtitle": "",
-        "align": "left"
+        "align": "center"
       },
       {
         "id": "b_ccde7543",
@@ -37,5 +37,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T01:31:48.317Z"
+  "draftUpdatedAt": "2026-09-29T01:32:10.801Z"
 }
