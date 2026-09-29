@@ -872,7 +872,7 @@
       "camera": "",
       "lens": "",
       "categoryId": null,
-      "projectId": null,
+      "projectId": "prj_naranja",
       "hidden": false,
       "featured": false,
       "showOnHome": false,
@@ -882,7 +882,7 @@
       "focalY": 0.5,
       "noWatermark": false,
       "createdAt": "2026-09-29T19:28:12.904Z",
-      "updatedAt": "2026-09-29T19:28:12.904Z"
+      "updatedAt": "2026-09-29T19:38:00.702Z"
     },
     {
       "id": "ph_inayiik97u",
