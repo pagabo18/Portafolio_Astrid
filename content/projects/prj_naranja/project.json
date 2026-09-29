@@ -58,6 +58,26 @@
           "align": "left"
         },
         {
+          "id": "b_8ccd7c9c",
+          "visible": true,
+          "spacingTop": "m",
+          "spacingBottom": "m",
+          "background": "default",
+          "textColor": "auto",
+          "label": "",
+          "type": "text",
+          "variant": "body",
+          "font": "",
+          "weight": "regular",
+          "scale": 1,
+          "italic": false,
+          "tracking": 0,
+          "content": "Fotografía comercial por @Sam.photo.art.",
+          "align": "left",
+          "span": 6,
+          "start": "auto"
+        },
+        {
           "id": "b_52f0c600",
           "visible": true,
           "spacingTop": "m",
@@ -91,7 +111,7 @@
                 "title": true,
                 "location": true,
                 "year": true,
-                "index": false,
+                "index": true,
                 "caption": true,
                 "metadata": false,
                 "text": "",
@@ -120,10 +140,10 @@
               "caption": {
                 "show": true,
                 "title": true,
-                "location": true,
-                "year": true,
-                "index": false,
-                "caption": true,
+                "location": false,
+                "year": false,
+                "index": true,
+                "caption": false,
                 "metadata": false,
                 "text": "",
                 "align": "left"
@@ -153,7 +173,7 @@
                 "title": true,
                 "location": true,
                 "year": true,
-                "index": false,
+                "index": true,
                 "caption": true,
                 "metadata": false,
                 "text": "",
@@ -210,12 +230,12 @@
             {
               "id": "s_f347b2fb",
               "photoId": "ph_inayiik97u",
-              "span": 6,
-              "start": "auto",
-              "anchorX": "custom",
-              "offsetX": 0,
-              "offsetY": 0,
-              "vAlign": "bottom",
+              "span": 8,
+              "start": 5,
+              "anchorX": "right",
+              "offsetX": 1,
+              "offsetY": -4,
+              "vAlign": "top",
               "fit": "contain",
               "aspect": "auto",
               "rotation": 0,
@@ -225,7 +245,7 @@
               "fullscreen": true,
               "visible": true,
               "caption": {
-                "show": false,
+                "show": true,
                 "title": true,
                 "location": true,
                 "year": true,
@@ -254,8 +274,8 @@
           "images": [
             {
               "id": "s_075373dc",
-              "photoId": "ph_v0ntqkffp3",
-              "span": 8,
+              "photoId": "ph_8ar0m6jl0i",
+              "span": 6,
               "start": 1,
               "anchorX": "custom",
               "offsetX": 0,
@@ -270,11 +290,11 @@
               "fullscreen": true,
               "visible": true,
               "caption": {
-                "show": false,
+                "show": true,
                 "title": true,
                 "location": true,
                 "year": true,
-                "index": false,
+                "index": true,
                 "caption": true,
                 "metadata": false,
                 "text": "",
@@ -285,13 +305,13 @@
             },
             {
               "id": "s_bce4356b",
-              "photoId": "ph_qqpqe60ikf",
-              "span": 4,
-              "start": 9,
-              "anchorX": "custom",
+              "photoId": "ph_au9dipnk1e",
+              "span": 6,
+              "start": 7,
+              "anchorX": "right",
               "offsetX": 0,
               "offsetY": 0,
-              "vAlign": "bottom",
+              "vAlign": "top",
               "fit": "contain",
               "aspect": "auto",
               "rotation": 0,
@@ -301,11 +321,11 @@
               "fullscreen": true,
               "visible": true,
               "caption": {
-                "show": false,
+                "show": true,
                 "title": true,
                 "location": true,
                 "year": true,
-                "index": false,
+                "index": true,
                 "caption": true,
                 "metadata": false,
                 "text": "",
@@ -318,9 +338,9 @@
         }
       ]
     },
-    "publishedAt": "2026-09-29T19:47:18.348Z"
+    "publishedAt": "2026-09-29T19:53:29.836Z"
   },
-  "publishedAt": "2026-09-29T19:47:18.348Z",
+  "publishedAt": "2026-09-29T19:53:29.836Z",
   "createdAt": "2026-09-29T02:51:20.126Z",
-  "updatedAt": "2026-09-29T19:48:44.866Z"
+  "updatedAt": "2026-09-29T19:53:29.836Z"
 }
