@@ -686,12 +686,12 @@
       "hidden": false,
       "featured": false,
       "showOnHome": false,
-      "showInArchive": false,
+      "showInArchive": true,
       "archiveOrder": 34,
       "focalX": 0.5,
       "focalY": 0.5,
       "createdAt": "2026-09-29T02:37:44.928Z",
-      "updatedAt": "2026-09-29T02:38:29.674Z"
+      "updatedAt": "2026-09-29T02:38:31.968Z"
     }
   ]
 }
