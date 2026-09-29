@@ -25,7 +25,7 @@
           "start": 1,
           "anchorX": "custom",
           "offsetX": 0,
-          "offsetY": 0,
+          "offsetY": -1,
           "vAlign": "top",
           "fit": "cover",
           "aspect": "21:9",
@@ -84,5 +84,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T03:34:30.898Z"
+  "draftUpdatedAt": "2026-09-29T03:34:38.691Z"
 }
