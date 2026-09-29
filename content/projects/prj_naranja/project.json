@@ -1,6 +1,6 @@
 {
   "id": "prj_naranja",
-  "slug": "naranja",
+  "slug": "sam-photo-art",
   "status": "published",
   "sortOrder": 0,
   "featured": true,
@@ -20,10 +20,10 @@
   ],
   "published": {
     "meta": {
-      "name": "Naranja",
-      "slug": "naranja",
+      "name": "Fotografía Comercial",
+      "slug": "sam-photo-art",
       "year": "2026",
-      "location": "",
+      "location": "Guadalajara, Jal",
       "description": "Bodegón de repostería sobre fondo naranja. Composiciones cenitales y de estudio, luz dura y color saturado.",
       "coverPhotoId": "ph_qon9yu3gju",
       "categoryId": "cat_mmmknmhp6s",
@@ -460,9 +460,9 @@
         }
       ]
     },
-    "publishedAt": "2026-09-29T02:51:20.126Z"
+    "publishedAt": "2026-09-29T03:42:48.634Z"
   },
-  "publishedAt": "2026-09-29T02:51:20.126Z",
+  "publishedAt": "2026-09-29T03:42:48.634Z",
   "createdAt": "2026-09-29T02:51:20.126Z",
-  "updatedAt": "2026-09-29T02:51:20.126Z"
+  "updatedAt": "2026-09-29T03:42:48.634Z"
 }
