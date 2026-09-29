@@ -36,7 +36,7 @@
         "type": "project-list",
         "source": "home",
         "projectIds": [],
-        "style": "editorial",
+        "style": "index",
         "showMeta": true,
         "limit": 0
       },
@@ -119,5 +119,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T02:05:42.782Z"
+  "draftUpdatedAt": "2026-09-29T02:05:47.226Z"
 }
