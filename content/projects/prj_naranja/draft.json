@@ -422,7 +422,7 @@
         "textSpan": 4,
         "image": {
           "id": "s_f01d131c",
-          "photoId": null,
+          "photoId": "ph_rdgkyoi9w7",
           "span": 7,
           "start": "auto",
           "anchorX": "custom",
@@ -501,5 +501,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:40:33.717Z"
+  "draftUpdatedAt": "2026-09-29T19:41:18.296Z"
 }
