@@ -21,9 +21,9 @@
         "image": {
           "id": "s_bdac0127",
           "photoId": "ph_1rm2h8e8hl",
-          "span": 12,
-          "start": 1,
-          "anchorX": "custom",
+          "span": 8,
+          "start": 3,
+          "anchorX": "center",
           "offsetX": 0,
           "offsetY": -1,
           "vAlign": "top",
@@ -84,5 +84,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T03:34:46.284Z"
+  "draftUpdatedAt": "2026-09-29T03:34:56.878Z"
 }
