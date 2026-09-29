@@ -158,7 +158,7 @@
       "camera": "",
       "lens": "",
       "categoryId": "cat_mmmknmhp6s",
-      "projectId": null,
+      "projectId": "prj_naranja",
       "hidden": false,
       "featured": false,
       "showOnHome": false,
@@ -168,7 +168,7 @@
       "focalY": 0.5,
       "noWatermark": false,
       "createdAt": "2026-09-29T02:27:36.715Z",
-      "updatedAt": "2026-09-29T03:35:47.877Z"
+      "updatedAt": "2026-09-29T02:51:20.126Z"
     },
     {
       "id": "ph_cqv6kk4d9z",
@@ -504,11 +504,11 @@
       "showOnHome": false,
       "showInArchive": true,
       "archiveOrder": 14,
-      "focalX": 0.5,
-      "focalY": 0.5,
+      "focalX": 0.5430422893365,
+      "focalY": 0.7510869501985887,
       "noWatermark": false,
       "createdAt": "2026-09-29T02:37:44.928Z",
-      "updatedAt": "2026-09-29T02:51:20.126Z"
+      "updatedAt": "2026-09-29T03:37:36.989Z"
     }
   ]
 }
