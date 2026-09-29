@@ -295,11 +295,11 @@
             "fullscreen": true,
             "visible": true,
             "caption": {
-              "show": false,
+              "show": true,
               "title": true,
               "location": true,
               "year": true,
-              "index": false,
+              "index": true,
               "caption": true,
               "metadata": false,
               "text": "",
@@ -312,5 +312,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:51:40.590Z"
+  "draftUpdatedAt": "2026-09-29T19:51:46.972Z"
 }
