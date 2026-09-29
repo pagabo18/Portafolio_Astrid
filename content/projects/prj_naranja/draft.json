@@ -215,48 +215,6 @@
         ]
       },
       {
-        "id": "b_bcbd1e84",
-        "visible": true,
-        "spacingTop": "m",
-        "spacingBottom": "xl",
-        "background": "default",
-        "textColor": "auto",
-        "label": "",
-        "type": "image",
-        "layout": "single-left",
-        "image": {
-          "id": "s_50f5b529",
-          "photoId": "ph_gtl34e0afg",
-          "span": 5,
-          "start": 1,
-          "anchorX": "left",
-          "offsetX": 0,
-          "offsetY": 0,
-          "vAlign": "top",
-          "fit": "contain",
-          "aspect": "auto",
-          "rotation": 0,
-          "scale": 1,
-          "overlap": false,
-          "zIndex": 0,
-          "fullscreen": true,
-          "visible": true,
-          "caption": {
-            "show": false,
-            "title": true,
-            "location": true,
-            "year": true,
-            "index": false,
-            "caption": true,
-            "metadata": false,
-            "text": "",
-            "align": "left"
-          },
-          "focal": null,
-          "responsive": {}
-        }
-      },
-      {
         "id": "b_3cb7fccd",
         "visible": true,
         "spacingTop": "l",
@@ -422,5 +380,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:45:13.710Z"
+  "draftUpdatedAt": "2026-09-29T19:45:15.484Z"
 }
