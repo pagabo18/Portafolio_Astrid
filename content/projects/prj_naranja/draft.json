@@ -187,8 +187,8 @@
             "span": 8,
             "start": 5,
             "anchorX": "right",
-            "offsetX": 0,
-            "offsetY": 0,
+            "offsetX": -1,
+            "offsetY": -4,
             "vAlign": "top",
             "fit": "contain",
             "aspect": "auto",
@@ -292,5 +292,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:48:02.868Z"
+  "draftUpdatedAt": "2026-09-29T19:48:10.635Z"
 }
