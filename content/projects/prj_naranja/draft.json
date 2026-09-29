@@ -186,8 +186,8 @@
           {
             "id": "s_f347b2fb",
             "photoId": "ph_tq1uqegaj1",
-            "span": 6,
-            "start": "auto",
+            "span": 9,
+            "start": 4,
             "anchorX": "custom",
             "offsetX": 0,
             "offsetY": 0,
@@ -347,5 +347,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T18:53:41.842Z"
+  "draftUpdatedAt": "2026-09-29T18:53:47.596Z"
 }
