@@ -81,7 +81,7 @@
             "start": 6,
             "anchorX": "custom",
             "offsetX": 0,
-            "offsetY": 0,
+            "offsetY": -3,
             "vAlign": "center",
             "fit": "contain",
             "aspect": "auto",
@@ -109,10 +109,10 @@
             "id": "s_8ee230c5",
             "photoId": "ph_hyl2p3ghuo",
             "span": 6,
-            "start": 4,
+            "start": 1,
             "anchorX": "custom",
             "offsetX": 0,
-            "offsetY": 0,
+            "offsetY": -4,
             "vAlign": "center",
             "fit": "contain",
             "aspect": "auto",
@@ -292,5 +292,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:45:20.900Z"
+  "draftUpdatedAt": "2026-09-29T19:45:29.207Z"
 }
