@@ -69,7 +69,7 @@ async function main() {
       id, filename: `demo-${String(i + 1).padStart(2, "0")}.jpg`, ext: "jpg", mime: "image/jpeg", bytes: buf.length, width: w, height: h, aspectRatio: w / h,
       orientation: w === h ? "square" : w > h ? "landscape" : "portrait", dominantColor: `#${hex(dominant.r)}${hex(dominant.g)}${hex(dominant.b)}`, lqip, originalSha: "",
       title, description: "", alt: `${title}, ${location}`, altSuggested: false, year, location, camera: "", lens: "", categoryId, projectId: null,
-      hidden: false, featured: false, showOnHome: false, showInArchive: true, archiveOrder: i, focalX: 0.5, focalY: 0.5, createdAt: now, updatedAt: now,
+      hidden: false, featured: false, showOnHome: false, showInArchive: true, archiveOrder: i, focalX: 0.5, focalY: 0.5, noWatermark: false, createdAt: now, updatedAt: now,
     });
     console.log(`photo ${i + 1}/${specs.length} ${title}`);
   }

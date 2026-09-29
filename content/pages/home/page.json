@@ -2,7 +2,7 @@
   "slug": "home",
   "published": {
     "meta": {
-      "title": "Home",
+      "title": "Inicio",
       "seoTitle": "",
       "seoDescription": "",
       "ogPhotoId": null
@@ -11,24 +11,71 @@
       "version": 1,
       "blocks": [
         {
-          "id": "b_46eb4892",
+          "id": "b_d01fdd51",
           "visible": true,
-          "spacingTop": "xl",
-          "spacingBottom": "m",
+          "spacingTop": "none",
+          "spacingBottom": "l",
           "background": "default",
+          "textColor": "auto",
+          "label": "",
+          "type": "image",
+          "layout": "full-bleed",
+          "image": {
+            "id": "s_bdac0127",
+            "photoId": "ph_1rm2h8e8hl",
+            "span": 12,
+            "start": 1,
+            "anchorX": "custom",
+            "offsetX": 0,
+            "offsetY": 0,
+            "vAlign": "top",
+            "fit": "cover",
+            "aspect": "21:9",
+            "rotation": 0,
+            "scale": 1,
+            "overlap": false,
+            "zIndex": 0,
+            "fullscreen": true,
+            "visible": true,
+            "caption": {
+              "show": false,
+              "title": true,
+              "location": true,
+              "year": true,
+              "index": false,
+              "caption": true,
+              "metadata": false,
+              "text": "",
+              "align": "left"
+            },
+            "focal": null,
+            "responsive": {}
+          }
+        },
+        {
+          "id": "b_ab66e1e7",
+          "visible": true,
+          "spacingTop": "l",
+          "spacingBottom": "l",
+          "background": "default",
+          "textColor": "auto",
           "label": "",
           "type": "chapter",
+          "font": "",
+          "scale": 1,
+          "italic": false,
           "number": "",
-          "title": "Selected work",
-          "subtitle": "",
+          "title": "Selección",
+          "subtitle": "Fotografía gastronómica",
           "align": "left"
         },
         {
-          "id": "b_ccde7543",
+          "id": "b_7c1579ce",
           "visible": true,
           "spacingTop": "m",
-          "spacingBottom": "m",
+          "spacingBottom": "xxl",
           "background": "default",
+          "textColor": "auto",
           "label": "",
           "type": "project-list",
           "source": "home",
@@ -39,8 +86,8 @@
         }
       ]
     },
-    "publishedAt": "2026-09-29T01:31:48.317Z"
+    "publishedAt": "2026-09-29T02:51:20.126Z"
   },
-  "publishedAt": "2026-09-29T01:31:48.317Z",
-  "updatedAt": "2026-09-29T01:31:48.317Z"
+  "publishedAt": "2026-09-29T02:51:20.126Z",
+  "updatedAt": "2026-09-29T02:51:20.126Z"
 }

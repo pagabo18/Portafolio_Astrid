@@ -37,6 +37,8 @@ export const photoRecordSchema = z.object({
   archiveOrder: z.number().default(0),
   focalX: z.number().default(0.5),
   focalY: z.number().default(0.5),
+  /** Leave this photograph unmarked even when the watermark is on. */
+  noWatermark: z.boolean().default(false),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -110,6 +112,30 @@ export type PageFile = z.infer<typeof pageFileSchema>;
 export const pageDraftSchema = z.object({ meta: pageMetaSchema, document: documentSchema, draftUpdatedAt: z.string() });
 export type PageDraft = z.infer<typeof pageDraftSchema>;
 
+/**
+ * Watermark stamped onto the images the site serves. It is applied when the
+ * variants are generated, so the copy in the repository stays clean and the
+ * mark can be changed or removed at any time.
+ */
+export const watermarkSchema = z.object({
+  enabled: z.boolean().default(false),
+  mode: z.enum(["text", "image"]).default("text"),
+  text: z.string().max(80).default(""),
+  family: z.enum(["sans", "serif", "mono"]).default("sans"),
+  position: z
+    .enum(["top-left", "top-center", "top-right", "center-left", "center", "center-right", "bottom-left", "bottom-center", "bottom-right"])
+    .default("bottom-right"),
+  /** Percentage of the image width: font size for text, logo width for an image. */
+  size: z.number().min(1).max(60).default(4),
+  opacity: z.number().min(0.05).max(1).default(0.55),
+  color: z.string().max(24).default("#ffffff"),
+  /** Distance from the edge, as a percentage of the image width. */
+  margin: z.number().min(0).max(20).default(3.5),
+  /** Skip the mark on variants narrower than this, so thumbnails stay clean. */
+  minWidth: z.number().min(0).max(4000).default(0),
+});
+export type Watermark = z.infer<typeof watermarkSchema>;
+
 export const siteSettingsSchema = z.object({
   siteName: z.string().default("Portfolio"),
   tagline: z.string().default("Photography"),
@@ -133,10 +159,13 @@ export const siteSettingsSchema = z.object({
   fontHeading: z.string().max(32).default(""),
   /** Language of the admin interface. */
   adminLanguage: z.enum(["es", "en"]).default("es"),
+  watermark: watermarkSchema.default(() => watermarkSchema.parse({})),
   /** Downscale uploads in the browser to this many px on the long edge (0 = keep original). */
   uploadMaxPx: z.number().default(4000),
 });
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
+
+export const WATERMARK_FILE = "content/watermark.png";
 
 export const PAGE_SLUGS = ["home", "archive", "about"] as const;
 export type PageSlug = (typeof PAGE_SLUGS)[number];

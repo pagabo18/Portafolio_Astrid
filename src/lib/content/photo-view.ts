@@ -59,6 +59,7 @@ export function photoView(
     archiveOrder: p.archiveOrder,
     focalX: p.focalX,
     focalY: p.focalY,
+    noWatermark: p.noWatermark,
     lqip: p.lqip,
     dominantColor: p.dominantColor,
     thumbUrl,

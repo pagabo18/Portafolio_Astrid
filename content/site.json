@@ -1,6 +1,6 @@
 {
-  "siteName": "Portfolio",
-  "tagline": "Photography",
+  "siteName": "Astrid",
+  "tagline": "Fotografía gastronómica",
   "authorName": "",
   "email": "",
   "instagram": "",
@@ -9,18 +9,34 @@
   "footerText": "",
   "nav": [
     {
-      "label": "Work",
+      "label": "Trabajos",
       "href": "/"
     },
     {
-      "label": "Archive",
+      "label": "Archivo",
       "href": "/archive"
     },
     {
-      "label": "About",
+      "label": "Sobre mí",
       "href": "/about"
     }
   ],
   "theme": "paper",
-  "uploadMaxPx": 4000
+  "uploadMaxPx": 4000,
+  "watermark": {
+    "enabled": true,
+    "mode": "text",
+    "text": "© ASTRID",
+    "family": "sans",
+    "position": "bottom-right",
+    "size": 2.6,
+    "opacity": 0.45,
+    "color": "#ffffff",
+    "margin": 3.5,
+    "minWidth": 700
+  },
+  "fontBody": "jost",
+  "fontHeading": "bodoni",
+  "pageBackground": "linen",
+  "adminLanguage": "es"
 }

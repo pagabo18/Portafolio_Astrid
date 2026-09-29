@@ -2,7 +2,7 @@
   "slug": "archive",
   "published": {
     "meta": {
-      "title": "Archive",
+      "title": "Archivo",
       "seoTitle": "",
       "seoDescription": "",
       "ogPhotoId": null
@@ -11,22 +11,40 @@
       "version": 1,
       "blocks": [
         {
-          "id": "b_48ae19ba",
+          "id": "b_73607938",
           "visible": true,
-          "spacingTop": "m",
+          "spacingTop": "xl",
           "spacingBottom": "m",
           "background": "default",
+          "textColor": "auto",
+          "label": "",
+          "type": "chapter",
+          "font": "",
+          "scale": 1,
+          "italic": false,
+          "number": "",
+          "title": "Archivo",
+          "subtitle": "",
+          "align": "left"
+        },
+        {
+          "id": "b_8224f644",
+          "visible": true,
+          "spacingTop": "m",
+          "spacingBottom": "xxl",
+          "background": "default",
+          "textColor": "auto",
           "label": "",
           "type": "photo-archive",
-          "columns": 4,
+          "columns": 3,
           "showFilters": true,
           "showCaptions": true,
           "sort": "manual"
         }
       ]
     },
-    "publishedAt": "2026-01-01T00:00:00.000Z"
+    "publishedAt": "2026-09-29T02:51:20.126Z"
   },
-  "publishedAt": "2026-01-01T00:00:00.000Z",
-  "updatedAt": "2026-01-01T00:00:00.000Z"
+  "publishedAt": "2026-09-29T02:51:20.126Z",
+  "updatedAt": "2026-09-29T02:51:20.126Z"
 }

@@ -15,6 +15,7 @@ import {
   projectFileSchema,
   siteSettingsSchema,
   PAGE_SLUGS,
+  WATERMARK_FILE,
   type Category,
   type PageDraft,
   type PageFile,
@@ -265,6 +266,7 @@ export async function uploadPhotos(
         archiveOrder: get().photos.length + added.length,
         focalX: 0.5,
         focalY: 0.5,
+        noWatermark: false,
         createdAt: now(),
         updatedAt: now(),
       };
@@ -604,6 +606,12 @@ export async function publishPage(slug: PageSlug) {
 /* ------------------------------------------------------------------ */
 /* site                                                                 */
 /* ------------------------------------------------------------------ */
+
+/** Store the PNG used as an image watermark. */
+export async function uploadWatermarkLogo(file: File) {
+  const base64 = await blobToBase64(file);
+  return enqueue("Watermark logo", () => client().commit("Update watermark logo", [{ path: WATERMARK_FILE, base64 }]));
+}
 
 export async function saveSite(patch: Partial<SiteSettings>) {
   const site = siteSettingsSchema.parse({ ...get().site, ...patch });

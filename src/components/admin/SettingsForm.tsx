@@ -1,12 +1,121 @@
 "use client";
 
-import { useState } from "react";
-import { saveSite, useAdminState } from "@/lib/content/admin";
+import { useRef, useState } from "react";
+import { saveSite, uploadWatermarkLogo, useAdminState } from "@/lib/content/admin";
 import type { SiteSettings } from "@/lib/content/types";
 import { repoFromEnv } from "@/lib/github/client";
 import { ColorPicker, FontPicker } from "./ui/Pickers";
 import { useT } from "@/lib/i18n/useT";
 import { setLang, useLang } from "@/lib/i18n/useT";
+
+const POSITIONS = [
+  ["top-left", "top-center", "top-right"],
+  ["center-left", "center", "center-right"],
+  ["bottom-left", "bottom-center", "bottom-right"],
+] as const;
+
+function WatermarkFields({ value, onChange }: { value: SiteSettings["watermark"]; onChange: (w: SiteSettings["watermark"]) => void }) {
+  const t = useT();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const set = <K extends keyof SiteSettings["watermark"]>(k: K, v: SiteSettings["watermark"][K]) => onChange({ ...value, [k]: v });
+
+  return (
+    <div className="rounded-sm border border-neutral-200 bg-neutral-50 p-4">
+      <label className="ui-check cursor-pointer">
+        <span>{t("Stamp a watermark on the photographs the site serves")}</span>
+        <input type="checkbox" checked={value.enabled} onChange={(e) => set("enabled", e.target.checked)} />
+      </label>
+      {value.enabled ? (
+        <div className="mt-3 space-y-3 border-t border-neutral-200 pt-3">
+          <div className="ui-seg">
+            {(["text", "image"] as const).map((m) => (
+              <button type="button" key={m} data-active={value.mode === m} onClick={() => set("mode", m)}>
+                {t(m === "text" ? "Text" : "Logo")}
+              </button>
+            ))}
+          </div>
+
+          {value.mode === "text" ? (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="col-span-2">
+                <label className="ui-label">{t("Text")}</label>
+                <input className="ui-input" value={value.text} onChange={(e) => set("text", e.target.value)} placeholder="© Astrid" />
+              </div>
+              <div>
+                <label className="ui-label">{t("Font")}</label>
+                <div className="ui-seg">
+                  {(["sans", "serif", "mono"] as const).map((f) => (
+                    <button type="button" key={f} data-active={value.family === f} onClick={() => set("family", f)}>{f}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="ui-label">{t("Colour")}</label>
+                <div className="ui-seg">
+                  {["#ffffff", "#000000"].map((c) => (
+                    <button type="button" key={c} data-active={value.color === c} onClick={() => set("color", c)}>
+                      {t(c === "#ffffff" ? "White" : "Black")}
+                    </button>
+                  ))}
+                  <label className="flex h-7 items-center px-1.5">
+                    <input type="color" className="h-4 w-4 cursor-pointer border-0 bg-transparent p-0" value={value.color} onChange={(e) => set("color", e.target.value)} />
+                  </label>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <input ref={fileRef} type="file" accept="image/png" hidden onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                setUploading(true);
+                try { await uploadWatermarkLogo(f); } finally { setUploading(false); e.target.value = ""; }
+              }} />
+              <button type="button" className="ui-btn" onClick={() => fileRef.current?.click()} disabled={uploading}>
+                {uploading ? t("Saving…") : t("Upload logo (PNG)")}
+              </button>
+              <span className="text-[10.5px] text-neutral-500">{t("A PNG with a transparent background works best.")}</span>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="ui-label">{t("Position")}</label>
+              <div className="grid w-fit grid-cols-3 gap-px overflow-hidden rounded-sm border border-neutral-200 bg-neutral-200">
+                {POSITIONS.flat().map((pos) => (
+                  <button
+                    key={pos}
+                    type="button"
+                    onClick={() => set("position", pos)}
+                    className={`grid h-7 w-7 place-items-center bg-white transition hover:bg-neutral-100 ${value.position === pos ? "bg-neutral-900 hover:bg-neutral-900" : ""}`}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-[1px] ${value.position === pos ? "bg-white" : "bg-neutral-300"}`} />
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div>
+                <label className="ui-label">{`${t("Size")} · ${value.size.toFixed(1)}%`}</label>
+                <input type="range" min={1} max={value.mode === "text" ? 12 : 45} step={0.5} value={value.size} onChange={(e) => set("size", Number(e.target.value))} className="w-full" />
+              </div>
+              <div>
+                <label className="ui-label">{`${t("Opacity")} · ${Math.round(value.opacity * 100)}%`}</label>
+                <input type="range" min={0.05} max={1} step={0.05} value={value.opacity} onChange={(e) => set("opacity", Number(e.target.value))} className="w-full" />
+              </div>
+              <div>
+                <label className="ui-label">{`${t("Margin")} · ${value.margin.toFixed(1)}%`}</label>
+                <input type="range" min={0} max={12} step={0.5} value={value.margin} onChange={(e) => set("margin", Number(e.target.value))} className="w-full" />
+              </div>
+            </div>
+          </div>
+          <p className="text-[10.5px] leading-relaxed text-neutral-500">{t("The mark is applied when the web images are generated, so the file kept in the repository stays clean and you can change or remove the mark later. It appears after the next publish.")}</p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 function F({ s, set, label, k, textarea }: { s: SiteSettings; set: <K extends keyof SiteSettings>(k: K, v: SiteSettings[K]) => void; label: string; k: keyof SiteSettings; textarea?: boolean }) {
   return (
@@ -112,6 +221,9 @@ export function SettingsForm() {
           ))}
           <button type="button" className="ui-btn" onClick={() => set("nav", [...s.nav, { label: "Link", href: "/" }])}>{t("+ Add link")}</button>
         </div>
+        <h2 className="eyebrow pt-4">{t("Watermark")}</h2>
+        <WatermarkFields value={s.watermark} onChange={(w) => set("watermark", w)} />
+
         <h2 className="eyebrow pt-4">{t("Uploads")}</h2>
         <div>
           <label className="ui-label">{t("Downscale originals on upload")}</label>

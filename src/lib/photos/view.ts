@@ -28,6 +28,7 @@ export type PhotoView = {
   archiveOrder: number;
   focalX: number;
   focalY: number;
+  noWatermark: boolean;
   lqip: string;
   dominantColor: string;
   thumbUrl: string;

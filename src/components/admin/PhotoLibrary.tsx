@@ -335,6 +335,7 @@ function PhotoDetails({ photo, categories, projects, onClose, onDelete }: { phot
           <Toggle label={t("Featured")} checked={p.featured} onChange={(v) => patch({ featured: v })} />
           <Toggle label={t("Show on home")} checked={p.showOnHome} onChange={(v) => patch({ showOnHome: v })} />
           <Toggle label={t("Show in archive")} checked={p.showInArchive} onChange={(v) => patch({ showInArchive: v })} />
+          <Toggle label={t("Leave this photograph unmarked")} checked={!!p.noWatermark} onChange={(v) => patch({ noWatermark: v })} />
         </div>
 
         <div>

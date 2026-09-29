@@ -36,7 +36,7 @@ export function LightboxProvider({ children }: { children: ReactNode }) {
           <div className="flex items-center justify-between px-6 py-4 text-[10.5px] tracking-[0.14em] uppercase text-[#b8b4ac]">
             <span>{[photo.title, photo.location, photo.year].filter(Boolean).join(" — ")}</span>
             <button className="hover:text-white" onClick={() => setPhoto(null)}>
-              Close ✕
+              ✕
             </button>
           </div>
           <div className="flex min-h-0 flex-1 items-center justify-center p-6 pt-0">

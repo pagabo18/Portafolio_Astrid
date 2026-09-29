@@ -35,6 +35,8 @@ export type RenderData = {
    * the block instead of navigating away).
    */
   projectLinkMode?: "public" | "preview" | "none";
+  /** Language of the public site, for the handful of strings it renders. */
+  lang?: "es" | "en";
   interactive?: boolean; // lightbox etc.
 };
 

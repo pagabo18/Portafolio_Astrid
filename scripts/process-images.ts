@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import sharp from "sharp";
+import { applyWatermark, shouldMark, type WatermarkConfig } from "../src/lib/images/watermark";
 
 /**
  * Generates the responsive variants for every photograph in content/photos.json
@@ -26,9 +27,9 @@ const WEBP_QUALITY = 88;
 const JPEG_QUALITY = 90;
 
 type Variant = { width: number; height: number; format: "avif" | "webp" | "jpeg"; file: string; bytes: number };
-type Photo = { id: string; ext: string; width: number };
+type Photo = { id: string; ext: string; width: number; noWatermark?: boolean };
 
-async function generate(src: Buffer, dir: string): Promise<Variant[]> {
+async function generate(src: Buffer, dir: string, wm: { cfg: WatermarkConfig; logo: Buffer | null; optedOut: boolean } | null): Promise<Variant[]> {
   fs.mkdirSync(dir, { recursive: true });
   const base = sharp(src, { failOn: "none", limitInputPixels: 400e6 }).rotate();
   const rotated = await base.toBuffer({ resolveWithObject: true });
@@ -38,7 +39,13 @@ async function generate(src: Buffer, dir: string): Promise<Variant[]> {
   if (!widths.includes(largest)) widths.push(largest);
   const variants: Variant[] = [];
   for (const w of widths) {
-    const p = sharp(rotated.data).resize({ width: w, withoutEnlargement: true, kernel: "lanczos3" });
+    // resize first, then stamp, so the mark keeps the same relative size
+    let base = await sharp(rotated.data).resize({ width: w, withoutEnlargement: true, kernel: "lanczos3" }).toBuffer({ resolveWithObject: true });
+    if (wm && shouldMark(wm.cfg, base.info.width, wm.optedOut)) {
+      const marked = await applyWatermark((b) => sharp(b), base.data, wm.cfg, base.info.width, base.info.height, wm.logo);
+      base = { data: marked as Buffer<ArrayBuffer>, info: base.info };
+    }
+    const p = sharp(base.data);
     const [avif, webp] = await Promise.all([
       p.clone().avif({ quality: AVIF_QUALITY, effort: 4, chromaSubsampling: "4:4:4" }).toBuffer({ resolveWithObject: true }),
       p.clone().webp({ quality: WEBP_QUALITY, effort: 5, smartSubsample: true }).toBuffer({ resolveWithObject: true }),
@@ -49,7 +56,11 @@ async function generate(src: Buffer, dir: string): Promise<Variant[]> {
     variants.push({ width: webp.info.width, height: webp.info.height, format: "webp", file: `w${w}.webp`, bytes: webp.info.size });
   }
   const jw = Math.min(width, 1600);
-  const jpeg = await sharp(rotated.data).resize({ width: jw, withoutEnlargement: true }).jpeg({ quality: JPEG_QUALITY, mozjpeg: true, chromaSubsampling: "4:4:4" }).toBuffer({ resolveWithObject: true });
+  let jbase = await sharp(rotated.data).resize({ width: jw, withoutEnlargement: true }).toBuffer({ resolveWithObject: true });
+  if (wm && shouldMark(wm.cfg, jbase.info.width, wm.optedOut)) {
+    jbase = { data: (await applyWatermark((b) => sharp(b), jbase.data, wm.cfg, jbase.info.width, jbase.info.height, wm.logo)) as Buffer<ArrayBuffer>, info: jbase.info };
+  }
+  const jpeg = await sharp(jbase.data).jpeg({ quality: JPEG_QUALITY, mozjpeg: true, chromaSubsampling: "4:4:4" }).toBuffer({ resolveWithObject: true });
   fs.writeFileSync(path.join(dir, `w${jw}.jpg`), jpeg.data);
   variants.push({ width: jpeg.info.width, height: jpeg.info.height, format: "jpeg", file: `w${jw}.jpg`, bytes: jpeg.info.size });
   // thumb + preview are normally uploaded by the browser; make sure they exist
@@ -67,6 +78,15 @@ function copyDir(from: string, to: string) {
 async function main() {
   const photosFile = path.join(CONTENT, "photos.json");
   const photos: Photo[] = fs.existsSync(photosFile) ? JSON.parse(fs.readFileSync(photosFile, "utf8")).photos : [];
+
+  // watermark settings travel with the cache key, so changing them re-renders
+  const siteFile = path.join(CONTENT, "site.json");
+  const site = fs.existsSync(siteFile) ? JSON.parse(fs.readFileSync(siteFile, "utf8")) : {};
+  const cfg: WatermarkConfig | null = site.watermark?.enabled ? (site.watermark as WatermarkConfig) : null;
+  const logoPath = path.join(CONTENT, "watermark.png");
+  const logo = cfg?.mode === "image" && fs.existsSync(logoPath) ? fs.readFileSync(logoPath) : null;
+  const wmKey = cfg ? createHash("sha1").update(JSON.stringify(cfg) + (logo ? createHash("sha1").update(logo).digest("hex") : "")).digest("hex").slice(0, 8) : "nw";
+  if (cfg) console.log(`watermark: ${cfg.mode}${cfg.mode === "text" ? ` “${cfg.text}”` : logo ? " (logo)" : " (logo missing — skipped)"} at ${cfg.position}`);
   fs.mkdirSync(CACHE, { recursive: true });
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(path.join(OUT, "photos"), { recursive: true });
@@ -83,7 +103,7 @@ async function main() {
     }
     const buf = fs.readFileSync(original);
     const sha = createHash("sha1").update(buf).digest("hex").slice(0, 16);
-    const key = `${p.id}-${sha}`;
+    const key = `${p.id}-${sha}-${p.noWatermark ? "nw" : wmKey}`;
     keep.add(key);
     const cacheDir = path.join(CACHE, key);
     let variants: Variant[];
@@ -95,7 +115,7 @@ async function main() {
       for (const f of ["thumb.webp", "preview.webp"]) if (fs.existsSync(path.join(srcDir, f))) fs.copyFileSync(path.join(srcDir, f), path.join(cacheDir, f));
       process.stdout.write(`processing ${p.id} …`);
       const t = Date.now();
-      variants = await generate(buf, cacheDir);
+      variants = await generate(buf, cacheDir, cfg ? { cfg, logo, optedOut: !!p.noWatermark } : null);
       console.log(` ${((Date.now() - t) / 1000).toFixed(1)}s`);
       generated++;
     }
@@ -104,7 +124,8 @@ async function main() {
     fs.rmSync(path.join(outDir, "variants.json"), { force: true });
     // the browser's thumb/preview win if newer than the cached ones
     for (const f of ["thumb.webp", "preview.webp"]) if (fs.existsSync(path.join(srcDir, f))) fs.copyFileSync(path.join(srcDir, f), path.join(outDir, f));
-    fs.copyFileSync(original, path.join(outDir, `original.${p.ext}`));
+    // the unmarked original is deliberately not published
+    if (!cfg) fs.copyFileSync(original, path.join(outDir, `original.${p.ext}`));
     manifest[p.id] = { sha, variants };
   }
   // prune cache entries for deleted / replaced photos

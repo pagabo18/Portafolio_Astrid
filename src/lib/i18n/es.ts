@@ -398,6 +398,18 @@ export const ES: Record<string, string> = {
   "Saved — deploys with the next build": "Guardado — se publica en la siguiente compilación",
   "Could not save": "No se pudo guardar",
   Infrastructure: "Infraestructura",
+  Watermark: "Marca de agua",
+  "Stamp a watermark on the photographs the site serves": "Poner marca de agua a las fotos que muestra la web",
+  Logo: "Logo",
+  "Upload logo (PNG)": "Subir logo (PNG)",
+  "A PNG with a transparent background works best.": "Funciona mejor un PNG con fondo transparente.",
+  Opacity: "Opacidad",
+  Margin: "Margen",
+  White: "Blanco",
+  Black: "Negro",
+  "The mark is applied when the web images are generated, so the file kept in the repository stays clean and you can change or remove the mark later. It appears after the next publish.":
+    "La marca se aplica al generar las imágenes de la web, así que el archivo guardado en el repositorio queda limpio y puedes cambiarla o quitarla cuando quieras. Aparece tras la siguiente publicación.",
+  "Leave this photograph unmarked": "Dejar esta foto sin marca de agua",
   Create: "Crear",
   "Photographs that belong to this project. Photos placed in the layout are added automatically.":
     "Fotografías que pertenecen a este proyecto. Las que coloques en la maquetación se añaden solas.",

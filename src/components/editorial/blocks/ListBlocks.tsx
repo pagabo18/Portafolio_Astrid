@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { PhotoArchiveBlock, ProjectListBlock } from "@/lib/blocks/schema";
 import type { ProjectCard } from "../types";
+import { pt } from "@/lib/content/public-strings";
 import { newSlot } from "@/lib/blocks/schema";
 import { EditorialImage } from "../EditorialImage";
 import { useLightbox } from "../Lightbox";
@@ -150,7 +151,7 @@ export function PhotoArchiveBlockView({ block, data, editor }: { block: PhotoArc
       {block.showFilters && (cats.length || years.length) ? (
         <div className="mb-10 flex flex-wrap gap-x-6 gap-y-2 eyebrow">
           <button onClick={() => { setCat(""); setYear(""); }} className={!cat && !year ? "text-ink" : "hover:text-ink"}>
-            All
+            {pt(data.lang, "All")}
           </button>
           {cats.map((c) => (
             <button key={c.id} onClick={() => setCat(c.id === cat ? "" : c.id)} className={cat === c.id ? "text-ink" : "hover:text-ink"}>

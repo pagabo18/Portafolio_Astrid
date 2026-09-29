@@ -2,7 +2,7 @@
   "slug": "about",
   "published": {
     "meta": {
-      "title": "About",
+      "title": "Sobre mí",
       "seoTitle": "",
       "seoDescription": "",
       "ogPhotoId": null
@@ -11,23 +11,88 @@
       "version": 1,
       "blocks": [
         {
-          "id": "b_80ea4b5e",
+          "id": "b_6bc82483",
           "visible": true,
-          "spacingTop": "m",
+          "spacingTop": "xl",
           "spacingBottom": "m",
           "background": "default",
+          "textColor": "auto",
+          "label": "",
+          "type": "chapter",
+          "font": "",
+          "scale": 1,
+          "italic": false,
+          "number": "",
+          "title": "Sobre mí",
+          "subtitle": "",
+          "align": "left"
+        },
+        {
+          "id": "b_bcf5059e",
+          "visible": true,
+          "spacingTop": "m",
+          "spacingBottom": "xl",
+          "background": "default",
+          "textColor": "auto",
           "label": "",
           "type": "text",
           "variant": "lead",
-          "content": "Photographer. Write a short biography here from the admin.",
+          "font": "",
+          "weight": "regular",
+          "scale": 1,
+          "italic": false,
+          "tracking": 0,
+          "content": "Escribe aquí tu biografía desde el administrador: quién eres, qué fotografías y cómo contactarte.",
           "align": "left",
           "span": 7,
           "start": 1
+        },
+        {
+          "id": "b_e9d9d024",
+          "visible": true,
+          "spacingTop": "m",
+          "spacingBottom": "xxl",
+          "background": "default",
+          "textColor": "auto",
+          "label": "",
+          "type": "image",
+          "layout": "single-right",
+          "image": {
+            "id": "s_891cbddb",
+            "photoId": "ph_9c8avteks1",
+            "span": 6,
+            "start": 6,
+            "anchorX": "right",
+            "offsetX": 0,
+            "offsetY": 0,
+            "vAlign": "top",
+            "fit": "contain",
+            "aspect": "auto",
+            "rotation": 0,
+            "scale": 1,
+            "overlap": false,
+            "zIndex": 0,
+            "fullscreen": true,
+            "visible": true,
+            "caption": {
+              "show": false,
+              "title": true,
+              "location": true,
+              "year": true,
+              "index": false,
+              "caption": true,
+              "metadata": false,
+              "text": "",
+              "align": "left"
+            },
+            "focal": null,
+            "responsive": {}
+          }
         }
       ]
     },
-    "publishedAt": "2026-01-01T00:00:00.000Z"
+    "publishedAt": "2026-09-29T02:51:20.126Z"
   },
-  "publishedAt": "2026-01-01T00:00:00.000Z",
-  "updatedAt": "2026-01-01T00:00:00.000Z"
+  "publishedAt": "2026-09-29T02:51:20.126Z",
+  "updatedAt": "2026-09-29T02:51:20.126Z"
 }

@@ -10,7 +10,8 @@
     "media": "tsx scripts/process-images.ts",
     "seed": "tsx scripts/seed.ts",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "photos:normalize": "tsx scripts/normalize-photos.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

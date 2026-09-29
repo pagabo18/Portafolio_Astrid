@@ -5,6 +5,7 @@ import { buildRenderData, loadPhotos, loadPublishedProjects, loadSite } from "@/
 import { EditorialRoot } from "@/components/editorial/EditorialRoot";
 import { EditorialImage } from "@/components/editorial/EditorialImage";
 import { fallbackUrl } from "@/lib/photos/view";
+import { pt } from "@/lib/content/public-strings";
 import { newSlot } from "@/lib/blocks/schema";
 
 type Props = { params: Promise<{ slug?: string[] }> };
@@ -47,7 +48,7 @@ export default async function ProjectPage({ params }: Props) {
       {next && next.id !== p.id ? (
         <div className="mt-24 border-t hairline px-[var(--margin)] py-10">
           <Link href={`/projects/${next.slug}/`} className="group flex items-baseline justify-between">
-            <span className="eyebrow">Next project</span>
+            <span className="eyebrow">{pt(loadSite().adminLanguage, "Next project")}</span>
             <span className="text-[clamp(18px,2vw,30px)] font-light transition group-hover:opacity-60">{next.snapshot.meta.name} →</span>
           </Link>
         </div>
@@ -59,11 +60,12 @@ export default async function ProjectPage({ params }: Props) {
 function ProjectsIndex() {
   const all = loadPublishedProjects();
   const photos = loadPhotos();
+  const lang = loadSite().adminLanguage;
   return (
     <div className="px-[var(--margin)] py-16">
-      <div className="ed-chapter-number mb-4">Index</div>
-      <h1 className="ed-title mb-16">Projects</h1>
-      {!all.length ? <p className="eyebrow">Nothing published yet.</p> : null}
+      <div className="ed-chapter-number mb-4">{pt(lang, "Index")}</div>
+      <h1 className="ed-title mb-16">{pt(lang, "Projects")}</h1>
+      {!all.length ? <p className="eyebrow">{pt(lang, "Nothing published yet.")}</p> : null}
       <ol className="divide-y hairline border-t border-b">
         {all.map((p, i) => {
           const cover = p.snapshot.meta.coverPhotoId ? photos.find((x) => x.id === p.snapshot.meta.coverPhotoId) : undefined;
