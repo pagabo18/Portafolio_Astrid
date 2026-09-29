@@ -180,7 +180,7 @@
             "fullscreen": true,
             "visible": true,
             "caption": {
-              "show": false,
+              "show": true,
               "title": true,
               "location": true,
               "year": true,
@@ -650,5 +650,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:43:40.588Z"
+  "draftUpdatedAt": "2026-09-29T19:43:45.755Z"
 }
