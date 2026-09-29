@@ -1,4 +1,4 @@
-# Editorial photography portfolio + visual CMS — 100 % free on GitHub
+# Portafolio Astrid — editorial photography portfolio + visual CMS
 
 A photography portfolio with the feel of a printed photo book, plus a visual
 admin (`/admin`) to compose every page — what appears, where, how big, with
@@ -36,22 +36,54 @@ site. No servers, no database service, no credit card, nothing that pauses.
 - Version history = git history. Every save and publish is a commit; the
   editor lists them and can restore any layout.
 
-## Set it up (10 minutes)
+## This site
 
-1. **Create the repository** from this code (public — GitHub Pages is free
-   for public repositories). Push to the `main` branch.
-2. **Settings → Pages → Build and deployment → Source: “GitHub Actions”.**
-   This single click creates the Pages site; the workflow cannot create it
-   on its own.
-3. **Create an access token** you will use to sign in to the admin:
-   GitHub → Settings → Developer settings → Personal access tokens →
-   *Fine-grained tokens* → Generate. Repository access: *Only select
-   repositories* → this repo. Permissions → Repository → **Contents: Read and
-   write**. Expiration: up to 1 year (you can create a new one later).
-4. Push, wait for the *Deploy to GitHub Pages* workflow, open
-   `https://<user>.github.io/<repo>/`, then `…/admin/`, paste the token.
-5. Upload photographs, create a project, publish. A couple of minutes later
-   the site is updated.
+| | |
+| --- | --- |
+| Live site | https://pagabo18.github.io/Portafolio_Astrid/ |
+| Admin | https://pagabo18.github.io/Portafolio_Astrid/admin/ |
+| Repository | `pagabo18/Portafolio_Astrid`, branch `main` (public) |
+
+Already done: the repository is public, Pages is set to build from GitHub
+Actions, `main` is the default branch and the `github-pages` environment has
+no branch restriction. Nothing else has to be configured.
+
+## Signing in to the admin
+
+The admin asks for a GitHub token once and keeps it in that browser. Create
+one at GitHub → Settings → Developer settings → Personal access tokens →
+*Fine-grained tokens* → Generate new token:
+
+- Repository access: **Only select repositories** → `Portafolio_Astrid`
+- Permissions → Repository permissions → **Contents: Read and write**
+- Expiration: up to a year; generate a new one when it expires
+
+Paste it at `/admin/` and you are in. Nothing else is needed.
+
+### Giving access to someone else
+
+Two options, both fine:
+
+- **Share a token.** Create a token as above and send it privately. Anyone
+  holding it can write to this repository, so do not post it in a group
+  chat. To revoke access, delete the token in Developer settings.
+- **Add them as a collaborator** (Settings → Collaborators) and let them
+  create their own token. Better when you want to revoke one person without
+  affecting the others.
+
+## What happens when you upload
+
+Each photograph is committed to the repository as it is dropped, and shows
+up in the admin immediately. Because the archive page is built from every
+photo marked *Show in archive*, an upload alone triggers a rebuild and the
+photo appears at `/archive/` a couple of minutes later. To put photographs
+on the home page or inside a project, create the project, arrange it and
+press **Publish**.
+
+Before a large batch, open Settings inside the admin and set *Downscale
+originals on upload* to 4000 px. Originals are stored in the repository, so
+this keeps it small and makes uploads much faster. The largest web variant
+is 2400 px, so nothing is lost visually.
 
 Custom domain: add a file `content/CNAME` with the domain and configure the
 domain in Settings → Pages; the workflow copies it into the build.
