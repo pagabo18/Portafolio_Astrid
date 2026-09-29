@@ -184,37 +184,6 @@
         "gap": "m",
         "images": [
           {
-            "id": "s_0d20fc65",
-            "photoId": "ph_9c8avteks1",
-            "span": 6,
-            "start": 1,
-            "anchorX": "custom",
-            "offsetX": 0,
-            "offsetY": -2,
-            "vAlign": "bottom",
-            "fit": "contain",
-            "aspect": "auto",
-            "rotation": 0,
-            "scale": 1,
-            "overlap": false,
-            "zIndex": 0,
-            "fullscreen": true,
-            "visible": true,
-            "caption": {
-              "show": false,
-              "title": true,
-              "location": true,
-              "year": true,
-              "index": false,
-              "caption": true,
-              "metadata": false,
-              "text": "",
-              "align": "left"
-            },
-            "focal": null,
-            "responsive": {}
-          },
-          {
             "id": "s_f347b2fb",
             "photoId": "ph_tq1uqegaj1",
             "span": 6,
@@ -378,5 +347,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T18:53:37.326Z"
+  "draftUpdatedAt": "2026-09-29T18:53:41.842Z"
 }
