@@ -6,16 +6,7 @@
   "featured": true,
   "showOnHome": true,
   "showInArchive": true,
-  "photoIds": [
-    "ph_demo01",
-    "ph_demo02",
-    "ph_demo03",
-    "ph_demo04",
-    "ph_demo08",
-    "ph_demo09",
-    "ph_demo10",
-    "ph_demo11"
-  ],
+  "photoIds": [],
   "published": {
     "meta": {
       "name": "Sevan on film",
@@ -351,5 +342,5 @@
   },
   "publishedAt": "2026-09-29T01:13:12.795Z",
   "createdAt": "2026-09-29T01:13:12.795Z",
-  "updatedAt": "2026-09-29T01:13:12.795Z"
+  "updatedAt": "2026-09-29T02:25:37.270Z"
 }

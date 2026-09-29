@@ -6,12 +6,7 @@
   "featured": false,
   "showOnHome": true,
   "showInArchive": true,
-  "photoIds": [
-    "ph_demo05",
-    "ph_demo06",
-    "ph_demo07",
-    "ph_demo12"
-  ],
+  "photoIds": [],
   "published": {
     "meta": {
       "name": "Enduro 2026",
@@ -201,5 +196,5 @@
   },
   "publishedAt": "2026-09-29T01:13:12.795Z",
   "createdAt": "2026-09-29T01:13:12.795Z",
-  "updatedAt": "2026-09-29T01:13:12.795Z"
+  "updatedAt": "2026-09-29T02:25:37.270Z"
 }
