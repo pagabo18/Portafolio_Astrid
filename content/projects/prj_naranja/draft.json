@@ -120,6 +120,113 @@
         "vAlign": "bottom"
       },
       {
+        "id": "b_52f0c600",
+        "visible": true,
+        "spacingTop": "m",
+        "spacingBottom": "m",
+        "background": "default",
+        "textColor": "auto",
+        "label": "",
+        "type": "image-group",
+        "layout": "triptych",
+        "gap": "m",
+        "images": [
+          {
+            "id": "s_19f56674",
+            "photoId": "ph_qqpqe60ikf",
+            "span": 4,
+            "start": "auto",
+            "anchorX": "custom",
+            "offsetX": 0,
+            "offsetY": 0,
+            "vAlign": "center",
+            "fit": "contain",
+            "aspect": "auto",
+            "rotation": 0,
+            "scale": 1,
+            "overlap": false,
+            "zIndex": 0,
+            "fullscreen": true,
+            "visible": true,
+            "caption": {
+              "show": false,
+              "title": true,
+              "location": true,
+              "year": true,
+              "index": false,
+              "caption": true,
+              "metadata": false,
+              "text": "",
+              "align": "left"
+            },
+            "focal": null,
+            "responsive": {}
+          },
+          {
+            "id": "s_e39d54b4",
+            "photoId": "ph_d5j8jte2qo",
+            "span": 4,
+            "start": "auto",
+            "anchorX": "custom",
+            "offsetX": 0,
+            "offsetY": 0,
+            "vAlign": "center",
+            "fit": "contain",
+            "aspect": "auto",
+            "rotation": 0,
+            "scale": 1,
+            "overlap": false,
+            "zIndex": 0,
+            "fullscreen": true,
+            "visible": true,
+            "caption": {
+              "show": false,
+              "title": true,
+              "location": true,
+              "year": true,
+              "index": false,
+              "caption": true,
+              "metadata": false,
+              "text": "",
+              "align": "left"
+            },
+            "focal": null,
+            "responsive": {}
+          },
+          {
+            "id": "s_8ee230c5",
+            "photoId": "ph_hyl2p3ghuo",
+            "span": 4,
+            "start": "auto",
+            "anchorX": "custom",
+            "offsetX": 0,
+            "offsetY": 0,
+            "vAlign": "center",
+            "fit": "contain",
+            "aspect": "auto",
+            "rotation": 0,
+            "scale": 1,
+            "overlap": false,
+            "zIndex": 0,
+            "fullscreen": true,
+            "visible": true,
+            "caption": {
+              "show": false,
+              "title": true,
+              "location": true,
+              "year": true,
+              "index": false,
+              "caption": true,
+              "metadata": false,
+              "text": "",
+              "align": "left"
+            },
+            "focal": null,
+            "responsive": {}
+          }
+        ]
+      },
+      {
         "id": "b_5d78c785",
         "visible": true,
         "spacingTop": "m",
@@ -543,5 +650,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:42:18.425Z"
+  "draftUpdatedAt": "2026-09-29T19:42:55.634Z"
 }
