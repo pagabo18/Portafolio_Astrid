@@ -134,8 +134,8 @@
           {
             "id": "s_19f56674",
             "photoId": "ph_qqpqe60ikf",
-            "span": 4,
-            "start": "auto",
+            "span": 8,
+            "start": 4,
             "anchorX": "custom",
             "offsetX": 0,
             "offsetY": 0,
@@ -165,8 +165,8 @@
           {
             "id": "s_e39d54b4",
             "photoId": "ph_d5j8jte2qo",
-            "span": 4,
-            "start": "auto",
+            "span": 5,
+            "start": 8,
             "anchorX": "custom",
             "offsetX": 0,
             "offsetY": 0,
@@ -650,5 +650,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:42:55.634Z"
+  "draftUpdatedAt": "2026-09-29T19:43:15.487Z"
 }
