@@ -1,9 +1,9 @@
 {
   "meta": {
     "name": "Fotografía Comercial",
-    "slug": "naranja",
+    "slug": "sam-photo-art",
     "year": "2026",
-    "location": "",
+    "location": "Guadalajara, Jal",
     "description": "Bodegón de repostería sobre fondo naranja. Composiciones cenitales y de estudio, luz dura y color saturado.",
     "coverPhotoId": "ph_qon9yu3gju",
     "categoryId": "cat_mmmknmhp6s",
@@ -440,5 +440,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T03:40:02.347Z"
+  "draftUpdatedAt": "2026-09-29T03:42:03.566Z"
 }
