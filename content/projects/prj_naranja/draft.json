@@ -144,9 +144,9 @@
           "photoId": "ph_d5j8jte2qo",
           "span": 7,
           "start": 6,
-          "anchorX": "right",
+          "anchorX": "custom",
           "offsetX": 0,
-          "offsetY": 0,
+          "offsetY": -4,
           "vAlign": "top",
           "fit": "contain",
           "aspect": "auto",
@@ -409,5 +409,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T18:52:52.998Z"
+  "draftUpdatedAt": "2026-09-29T18:53:10.885Z"
 }
