@@ -32,6 +32,26 @@
         "align": "left"
       },
       {
+        "id": "b_8ccd7c9c",
+        "visible": true,
+        "spacingTop": "m",
+        "spacingBottom": "m",
+        "background": "default",
+        "textColor": "auto",
+        "label": "",
+        "type": "text",
+        "variant": "body",
+        "font": "",
+        "weight": "regular",
+        "scale": 1,
+        "italic": false,
+        "tracking": 0,
+        "content": "",
+        "align": "left",
+        "span": 6,
+        "start": "auto"
+      },
+      {
         "id": "b_52f0c600",
         "visible": true,
         "spacingTop": "m",
@@ -292,5 +312,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:50:10.813Z"
+  "draftUpdatedAt": "2026-09-29T19:50:48.251Z"
 }
