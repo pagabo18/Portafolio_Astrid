@@ -17,6 +17,12 @@
       "name": "Portrait",
       "slug": "portrait",
       "sortOrder": 2
+    },
+    {
+      "id": "cat_mmmknmhp6s",
+      "name": "Comida",
+      "slug": "comida",
+      "sortOrder": 3
     }
   ]
 }
