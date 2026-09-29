@@ -304,11 +304,11 @@
           {
             "id": "s_bce4356b",
             "photoId": "ph_qqpqe60ikf",
-            "span": 4,
-            "start": 9,
+            "span": 8,
+            "start": 5,
             "anchorX": "custom",
             "offsetX": 0,
-            "offsetY": 0,
+            "offsetY": -4,
             "vAlign": "bottom",
             "fit": "contain",
             "aspect": "auto",
@@ -378,5 +378,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T18:53:30.384Z"
+  "draftUpdatedAt": "2026-09-29T18:53:34.868Z"
 }
