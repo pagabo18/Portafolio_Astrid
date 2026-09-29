@@ -134,7 +134,7 @@ export const siteSettingsSchema = z.object({
   /** Language of the admin interface. */
   adminLanguage: z.enum(["es", "en"]).default("es"),
   /** Downscale uploads in the browser to this many px on the long edge (0 = keep original). */
-  uploadMaxPx: z.number().default(0),
+  uploadMaxPx: z.number().default(4000),
 });
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 

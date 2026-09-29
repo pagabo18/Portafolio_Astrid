@@ -17,12 +17,36 @@ export type BrowserProcessed = {
   original: Blob;
   ext: string;
   mime: string;
+  /** True when the file had to be re-encoded to fit the upload limit. */
+  downscaled: boolean;
 };
 
 const SUPPORTED = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 
+/**
+ * Upper bound for what we send to GitHub. Its blob API rejects large bodies
+ * ("your input was too large to process") and base64 inflates a file by a
+ * third, so anything heavier is re-encoded until it fits. 2400 px is the
+ * widest variant the site ever serves, so this loses nothing visible.
+ */
+export const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
+const FALLBACK_STEPS: { longEdge: number; quality: number }[] = [
+  { longEdge: 4000, quality: 0.92 },
+  { longEdge: 3600, quality: 0.9 },
+  { longEdge: 3200, quality: 0.88 },
+  { longEdge: 2800, quality: 0.86 },
+  { longEdge: 2400, quality: 0.84 },
+  { longEdge: 2000, quality: 0.82 },
+];
+
 export function isSupportedImage(file: File) {
   return SUPPORTED.includes(file.type) || /\.(jpe?g|png|webp|avif)$/i.test(file.name);
+}
+
+/** Render the bitmap with its long edge capped at `longEdge`. */
+function canvasForLongEdge(bitmap: ImageBitmap, longEdge: number) {
+  const maxW = bitmap.width >= bitmap.height ? longEdge : Math.round(longEdge * (bitmap.width / bitmap.height));
+  return canvasFor(bitmap, maxW);
 }
 
 function canvasFor(bitmap: ImageBitmap, maxW: number) {
@@ -46,9 +70,9 @@ function toHex(n: number) {
 
 export async function processInBrowser(file: File, opts: { maxPx?: number } = {}): Promise<BrowserProcessed> {
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
-  const width = bitmap.width;
-  const height = bitmap.height;
-  const aspectRatio = width / height;
+  let width = bitmap.width;
+  let height = bitmap.height;
+  const aspectRatio = bitmap.width / bitmap.height;
   const orientation = Math.abs(aspectRatio - 1) < 0.02 ? "square" : aspectRatio > 1 ? "landscape" : "portrait";
 
   const thumbC = canvasFor(bitmap, 400);
@@ -67,15 +91,30 @@ export async function processInBrowser(file: File, opts: { maxPx?: number } = {}
   let original: Blob = file;
   let ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace("jpeg", "jpg");
   let mime = file.type || "image/jpeg";
+  let downscaled = false;
+  const longEdge = Math.max(width, height);
   const maxPx = opts.maxPx ?? 0;
-  if (maxPx > 0 && Math.max(width, height) > maxPx) {
-    const c = canvasFor(bitmap, aspectRatio >= 1 ? maxPx : Math.round(maxPx * aspectRatio));
-    original = await toBlob(c, "image/jpeg", 0.92);
-    ext = "jpg";
-    mime = "image/jpeg";
+
+  // Re-encode when the photographer asked for it, or when the file is simply
+  // too heavy to reach GitHub in one piece.
+  const steps = maxPx > 0 ? [{ longEdge: maxPx, quality: 0.92 }, ...FALLBACK_STEPS.filter((s) => s.longEdge < maxPx)] : FALLBACK_STEPS;
+  const needsShrink = (maxPx > 0 && longEdge > maxPx) || file.size > MAX_UPLOAD_BYTES;
+  if (needsShrink) {
+    for (const step of steps) {
+      const c = canvasForLongEdge(bitmap, Math.min(step.longEdge, longEdge));
+      const blob = await toBlob(c, "image/jpeg", step.quality);
+      original = blob;
+      downscaled = true;
+      ext = "jpg";
+      mime = "image/jpeg";
+      // the record must describe the file we keep, not the camera file
+      width = c.width;
+      height = c.height;
+      if (blob.size <= MAX_UPLOAD_BYTES) break;
+    }
   }
   bitmap.close();
-  return { width, height, aspectRatio, orientation, dominantColor, lqip, thumb, preview, original, ext, mime };
+  return { width, height, aspectRatio, orientation, dominantColor, lqip, thumb, preview, original, ext, mime, downscaled };
 }
 
 export function blobToDataUrl(b: Blob) {

@@ -287,8 +287,9 @@ export async function uploadPhotos(
       added.push(rec);
       progress[i].state = "done";
     } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed";
       progress[i].state = "error";
-      progress[i].error = e instanceof Error ? e.message : "Failed";
+      progress[i].error = /too large/i.test(msg) ? "Too large for GitHub — lower “Downscale originals on upload” in Settings" : msg;
     }
     report();
   }

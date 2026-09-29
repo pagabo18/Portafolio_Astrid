@@ -403,7 +403,9 @@ export const ES: Record<string, string> = {
     "Fotografías que pertenecen a este proyecto. Las que coloques en la maquetación se añaden solas.",
   "Publish from the top bar to make changes live.": "Pulsa Publicar arriba para que los cambios salgan a la web.",
   "Originals are stored in the repository. Downscaling keeps the repo small; the largest web variant is 2400 px anyway.":
-    "Los originales se guardan en el repositorio. Reducirlos lo mantiene ligero; la variante web más grande es de 2400 px de todos modos.",
+    "Los originales se guardan en el repositorio. Reducirlos lo mantiene ligero y acelera las subidas; la variante web más grande es de 2400 px de todos modos. Aunque elijas “Mantener el original”, una foto demasiado pesada se reduce sola para que GitHub la acepte.",
+  "Too large for GitHub — lower “Downscale originals on upload” in Settings":
+    "Demasiado pesada para GitHub — baja “Reducir los originales al subirlos” en Ajustes",
   "Choose the photographs for this project. A first editorial composition is generated from their orientation and tone.":
     "Elige las fotografías del proyecto. Se genera una primera composición a partir de su orientación y su tono.",
   "The original and its previews are removed from the repository. Layouts that use them will show an empty slot. Use “Hide” if you only want them off the site.":

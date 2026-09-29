@@ -116,7 +116,7 @@ export function SettingsForm() {
         <div>
           <label className="ui-label">{t("Downscale originals on upload")}</label>
           <div className="ui-seg">
-            {[[0, t("Keep original")], [4000, "4000 px"], [3000, "3000 px"], [2400, "2400 px"]].map(([v, l]) => (
+            {[[4000, "4000 px"], [3000, "3000 px"], [2400, "2400 px"], [0, t("Keep original")]].map(([v, l]) => (
               <button type="button" key={v} data-active={s.uploadMaxPx === v} onClick={() => set("uploadMaxPx", v as number)}>{l}</button>
             ))}
           </div>

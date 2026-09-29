@@ -8,10 +8,19 @@
   "seoDescription": "",
   "footerText": "",
   "nav": [
-    { "label": "Work", "href": "/" },
-    { "label": "Archive", "href": "/archive" },
-    { "label": "About", "href": "/about" }
+    {
+      "label": "Work",
+      "href": "/"
+    },
+    {
+      "label": "Archive",
+      "href": "/archive"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    }
   ],
   "theme": "paper",
-  "uploadMaxPx": 0
+  "uploadMaxPx": 4000
 }
