@@ -34,8 +34,18 @@
         "style": "editorial",
         "showMeta": true,
         "limit": 0
+      },
+      {
+        "id": "b_8bdb5d9b",
+        "visible": true,
+        "spacingTop": "none",
+        "spacingBottom": "none",
+        "background": "default",
+        "label": "",
+        "type": "spacer",
+        "size": "xl"
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T01:32:10.801Z"
+  "draftUpdatedAt": "2026-09-29T01:32:19.971Z"
 }
