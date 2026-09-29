@@ -120,7 +120,7 @@
             "id": "s_f653607d",
             "photoId": "ph_1rm2h8e8hl",
             "span": 5,
-            "start": 5,
+            "start": 7,
             "anchorX": "custom",
             "offsetX": 0,
             "offsetY": -4,
@@ -440,5 +440,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T18:51:59.741Z"
+  "draftUpdatedAt": "2026-09-29T18:52:10.530Z"
 }
