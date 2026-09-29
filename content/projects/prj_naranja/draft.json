@@ -44,7 +44,7 @@
         "image": {
           "id": "s_2ac2d202",
           "photoId": "ph_qon9yu3gju",
-          "span": 12,
+          "span": 5,
           "start": 1,
           "anchorX": "custom",
           "offsetX": 0,
@@ -440,5 +440,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T03:42:48.634Z"
+  "draftUpdatedAt": "2026-09-29T18:51:48.905Z"
 }
