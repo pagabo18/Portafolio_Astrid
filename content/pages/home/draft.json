@@ -58,7 +58,7 @@
         "textSpan": 4,
         "image": {
           "id": "s_bf18250a",
-          "photoId": null,
+          "photoId": "ph_demo05",
           "span": 7,
           "start": "auto",
           "offsetX": 0,
@@ -90,5 +90,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T01:32:24.605Z"
+  "draftUpdatedAt": "2026-09-29T01:32:29.577Z"
 }
