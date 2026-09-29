@@ -566,7 +566,7 @@
       "camera": "",
       "lens": "",
       "categoryId": null,
-      "projectId": null,
+      "projectId": "prj_naranja",
       "hidden": false,
       "featured": false,
       "showOnHome": false,
@@ -576,7 +576,7 @@
       "focalY": 0.5,
       "noWatermark": false,
       "createdAt": "2026-09-29T19:26:54.103Z",
-      "updatedAt": "2026-09-29T19:26:54.103Z"
+      "updatedAt": "2026-09-29T19:38:28.015Z"
     },
     {
       "id": "ph_cs8kx7ih25",
