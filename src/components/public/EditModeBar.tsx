@@ -23,16 +23,16 @@ export function EditModeBar() {
   let href = "/admin";
   let label = "Edit";
   if (path === "/") {
-    href = "/admin/editor?type=page&id=home";
+    href = "/admin/editor/?type=page&id=home";
     label = "Edit home";
   } else if (path.startsWith("/projects/")) {
-    href = `/admin/projects?slug=${path.split("/")[2]}`;
+    href = `/admin/projects/?slug=${path.split("/")[2]}`;
     label = "Edit project";
   } else if (path.startsWith("/archive")) {
-    href = "/admin/editor?type=page&id=archive";
+    href = "/admin/editor/?type=page&id=archive";
     label = "Edit archive";
   } else if (path.startsWith("/about")) {
-    href = "/admin/editor?type=page&id=about";
+    href = "/admin/editor/?type=page&id=about";
     label = "Edit about";
   }
   return (

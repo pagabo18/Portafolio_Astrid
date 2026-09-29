@@ -24,7 +24,7 @@ export function PagesIndex() {
           const p = pages[slug];
           return (
             <li key={slug}>
-              <Link href={`/admin/editor?type=page&id=${slug}`} className="flex items-center justify-between px-5 py-4 hover:bg-neutral-50">
+              <Link href={`/admin/editor/?type=page&id=${slug}`} className="flex items-center justify-between px-5 py-4 hover:bg-neutral-50">
                 <div>
                   <div className="text-[14px]">{p.draft.meta.title}</div>
                   <div className="text-[11.5px] text-neutral-500">{DESC[slug]}</div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { PhotoArchiveBlock, ProjectListBlock } from "@/lib/blocks/schema";
+import type { ProjectCard } from "../types";
 import { newSlot } from "@/lib/blocks/schema";
 import { EditorialImage } from "../EditorialImage";
 import { useLightbox } from "../Lightbox";
@@ -13,7 +14,7 @@ export function ProjectListBlockView({ block, data, editor }: { block: ProjectLi
   if (block.source === "featured") list = list.filter((p) => p.featured);
   if (block.source === "manual") list = block.projectIds.map((id) => list.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => !!p);
   if (block.limit) list = list.slice(0, block.limit);
-  const href = (s: string) => `${data.projectHrefBase ?? "/projects"}/${s}`;
+  const mode = data.projectLinkMode ?? "public";
   const slot = newSlot({ span: 12, fit: "cover", aspect: block.style === "grid" ? "4:5" : "3:2" });
 
   if (!list.length) {
@@ -27,11 +28,11 @@ export function ProjectListBlockView({ block, data, editor }: { block: ProjectLi
           <ol className="divide-y hairline border-t border-b">
             {list.map((p, i) => (
               <li key={p.id}>
-                <Link href={href(p.slug)} className="group grid grid-cols-12 items-baseline gap-4 py-5 transition hover:text-ink-2">
+                <CardLink mode={mode} card={p} className="group grid grid-cols-12 items-baseline gap-4 py-5 transition hover:text-ink-2">
                   <span className="ed-chapter-number col-span-1">{String(i + 1).padStart(2, "0")}</span>
                   <span className="col-span-7 text-[clamp(18px,2cqw,30px)] font-light">{p.name}</span>
                   {block.showMeta ? <span className="eyebrow col-span-4 text-right">{[p.year, p.location].filter(Boolean).join(" — ")}</span> : null}
-                </Link>
+                </CardLink>
               </li>
             ))}
           </ol>
@@ -47,13 +48,13 @@ export function ProjectListBlockView({ block, data, editor }: { block: ProjectLi
           const photo = p.coverPhotoId ? data.photos[p.coverPhotoId] : undefined;
           return (
             <div key={p.id} className="ed-slot" style={{ "--span": "4", "--span-md": "6", "--span-sm": "12" } as React.CSSProperties}>
-              <Link href={href(p.slug)} className="block">
+              <CardLink mode={mode} card={p} className="block">
                 {photo ? <EditorialImage photo={photo} slot={{ ...slot, span: 4 }} /> : <div className="ed-empty-slot">No cover</div>}
                 <div className="ed-caption">
                   <span className="ed-cap-title">{p.name}</span>
                   {block.showMeta ? <span>{[p.year, p.location].filter(Boolean).join(", ")}</span> : null}
                 </div>
-              </Link>
+              </CardLink>
             </div>
           );
         })}
@@ -81,7 +82,7 @@ export function ProjectListBlockView({ block, data, editor }: { block: ProjectLi
             className="ed-slot"
             style={{ "--span": String(span), "--start": String(pat.start), "--span-md": String(Math.min(12, span + 2)), "--span-sm": "12" } as React.CSSProperties}
           >
-            <Link href={href(p.slug)} className="group block">
+            <CardLink mode={mode} card={p} className="group block">
               {photo ? <EditorialImage photo={photo} slot={{ ...newSlot({ span, aspect: "auto", fit: "contain" }) }} /> : <div className="ed-empty-slot">No cover</div>}
               <div className="mt-4 flex items-baseline justify-between gap-6">
                 <div>
@@ -90,11 +91,22 @@ export function ProjectListBlockView({ block, data, editor }: { block: ProjectLi
                 </div>
                 {block.showMeta ? <span className="eyebrow whitespace-nowrap">{[p.year, p.location].filter(Boolean).join(" — ")}</span> : null}
               </div>
-            </Link>
+            </CardLink>
           </div>
         );
       })}
     </div>
+  );
+}
+
+/** A project card links to the public page, to its draft preview, or nowhere. */
+function CardLink({ mode, card, className, children }: { mode: "public" | "preview" | "none"; card: ProjectCard; className?: string; children: React.ReactNode }) {
+  if (mode === "none") return <div className={className}>{children}</div>;
+  const href = mode === "preview" ? `/preview/?type=project&id=${card.id}` : `/projects/${card.slug}/`;
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
   );
 }
 

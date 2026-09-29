@@ -29,8 +29,12 @@ export type RenderData = {
   archivePhotos?: PhotoView[];
   categories?: { id: string; name: string }[];
   years?: string[];
-  /** Base path for project links (e.g. "/projects" or "/preview/project"). */
-  projectHrefBase?: string;
+  /**
+   * How project cards link out: to the public page, to the admin draft
+   * preview, or nowhere (inside the editor canvas, where a click selects
+   * the block instead of navigating away).
+   */
+  projectLinkMode?: "public" | "preview" | "none";
   interactive?: boolean; // lightbox etc.
 };
 

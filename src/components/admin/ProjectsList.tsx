@@ -24,7 +24,7 @@ export function ProjectsList() {
   const slugParam = params.get("slug");
   const bySlug = slugParam ? projects.find((p) => p.file.slug === slugParam) : null;
   useEffect(() => {
-    if (bySlug) router.replace(`/admin/editor?type=project&id=${bySlug.file.id}`);
+    if (bySlug) router.replace(`/admin/editor/?type=project&id=${bySlug.file.id}`);
   }, [bySlug, router]);
   const [del, setDel] = useState<ProjectEntry | null>(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
@@ -53,7 +53,7 @@ export function ProjectsList() {
           <SortableContext items={projects.map((r) => r.file.id)} strategy={verticalListSortingStrategy}>
             <ul className="ui-card divide-y divide-neutral-100">
               {projects.map((r) => (
-                <Row key={r.file.id} entry={r} coverUrl={r.draft.meta.coverPhotoId ? covers[r.draft.meta.coverPhotoId]?.thumbUrl ?? null : null} onFlags={(p) => updateProjectFlags(r.file.id, p)} onDuplicate={async () => { const d = await duplicateProject(r.file.id); router.push(`/admin/editor?type=project&id=${d.file.id}`); }} onDelete={() => setDel(r)} />
+                <Row key={r.file.id} entry={r} coverUrl={r.draft.meta.coverPhotoId ? covers[r.draft.meta.coverPhotoId]?.thumbUrl ?? null : null} onFlags={(p) => updateProjectFlags(r.file.id, p)} onDuplicate={async () => { const d = await duplicateProject(r.file.id); router.push(`/admin/editor/?type=project&id=${d.file.id}`); }} onDelete={() => setDel(r)} />
               ))}
             </ul>
           </SortableContext>
@@ -71,7 +71,7 @@ function Row({ entry, coverUrl, onFlags, onDuplicate, onDelete }: { entry: Proje
   const { file, draft } = entry;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: file.id });
   const [menu, setMenu] = useState(false);
-  const editHref = `/admin/editor?type=project&id=${file.id}`;
+  const editHref = `/admin/editor/?type=project&id=${file.id}`;
   const unpublished = projectHasUnpublished(entry);
   return (
     <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`flex items-center gap-4 px-4 py-3 ${isDragging ? "bg-neutral-50 shadow" : ""}`}>
@@ -93,7 +93,7 @@ function Row({ entry, coverUrl, onFlags, onDuplicate, onDelete }: { entry: Proje
         {menu ? (
           <div className="absolute right-0 z-20 mt-1 w-52 rounded-sm border border-neutral-200 bg-white py-1 text-[12px] shadow-lg" onMouseLeave={() => setMenu(false)}>
             <Link href={editHref} className="block px-3 py-1.5 hover:bg-neutral-50">Edit</Link>
-            <Link href={`/preview?type=project&id=${file.id}`} className="block px-3 py-1.5 hover:bg-neutral-50">Preview draft</Link>
+            <Link href={`/preview/?type=project&id=${file.id}`} className="block px-3 py-1.5 hover:bg-neutral-50">Preview draft</Link>
             {file.status === "published" ? <a href={withBase(`/projects/${file.slug}/`)} target="_blank" rel="noreferrer" className="block px-3 py-1.5 hover:bg-neutral-50">View live ↗</a> : null}
             <div className="my-1 border-t border-neutral-100" />
             <button className="block w-full px-3 py-1.5 text-left hover:bg-neutral-50" onClick={() => onFlags({ featured: !file.featured })}>{file.featured ? "Remove from featured" : "Mark as featured"}</button>
@@ -123,7 +123,7 @@ function NewProjectWizard({ open, onClose, categories }: { open: boolean; onClos
     setBusy(true);
     try {
       const p = await createProject({ ...form, categoryId: form.categoryId || null, photoIds: photos.map((x) => x.id) });
-      router.push(`/admin/editor?type=project&id=${p.file.id}`);
+      router.push(`/admin/editor/?type=project&id=${p.file.id}`);
     } finally {
       setBusy(false);
     }

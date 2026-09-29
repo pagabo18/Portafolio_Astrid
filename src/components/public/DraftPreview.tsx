@@ -10,7 +10,7 @@ import { PAGE_SLUGS, type PageSlug } from "@/lib/content/types";
 import type { ProjectCard } from "@/components/editorial/types";
 
 /**
- * /preview?type=project&id=…  — renders the DRAFT with the admin's session.
+  * /preview/?type=project&id=…  — renders the DRAFT with the admin's session.
  * Drafts are never part of the published site.
  */
 export function DraftPreview() {
@@ -47,8 +47,8 @@ function Body() {
     for (const k of Object.keys(photos)) if (photos[k].hidden) delete photos[k];
     return (
       <>
-        {banner(`Draft preview — ${p.draft.meta.name}`, `/admin/editor?type=project&id=${id}`)}
-        <EditorialRoot document={p.draft.document} data={{ photos, project: { ...p.draft.meta, categoryName: categories.find((c) => c.id === p.draft.meta.categoryId)?.name ?? "", index: idx }, projectHrefBase: "/preview?type=project&id=" }} />
+        {banner(`Draft preview — ${p.draft.meta.name}`, `/admin/editor/?type=project&id=${id}`)}
+        <EditorialRoot document={p.draft.document} data={{ photos, project: { ...p.draft.meta, categoryName: categories.find((c) => c.id === p.draft.meta.categoryId)?.name ?? "", index: idx }, projectLinkMode: "preview" }} />
       </>
     );
   }
@@ -60,10 +60,10 @@ function Body() {
     const archive = all.filter((x) => x.showInArchive).sort((a, b) => a.archiveOrder - b.archiveOrder);
     return (
       <>
-        {banner(`Draft preview — ${p.draft.meta.title}`, `/admin/editor?type=page&id=${id}`)}
+        {banner(`Draft preview — ${p.draft.meta.title}`, `/admin/editor/?type=page&id=${id}`)}
         <EditorialRoot
           document={p.draft.document}
-          data={{ photos: viewMap([...collectPhotoIds(p.draft.document), ...cards.map((c) => c.coverPhotoId ?? "")].filter(Boolean)), projects: cards, archivePhotos: archive, categories: categories.map((c) => ({ id: c.id, name: c.name })), years: [...new Set(archive.map((x) => x.year).filter(Boolean))].sort().reverse(), projectHrefBase: "/projects" }}
+          data={{ photos: viewMap([...collectPhotoIds(p.draft.document), ...cards.map((c) => c.coverPhotoId ?? "")].filter(Boolean)), projects: cards, archivePhotos: archive, categories: categories.map((c) => ({ id: c.id, name: c.name })), years: [...new Set(archive.map((x) => x.year).filter(Boolean))].sort().reverse(), projectLinkMode: "preview" }}
         />
       </>
     );

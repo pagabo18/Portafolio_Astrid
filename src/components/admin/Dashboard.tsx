@@ -12,8 +12,8 @@ export function Dashboard() {
   const pages = useAdminState((s) => s.pages);
   const env = repoFromEnv();
   const pending = [
-    ...projects.filter((p) => p.file.status !== "archived" && projectHasUnpublished(p)).map((p) => ({ href: `/admin/editor?type=project&id=${p.file.id}`, name: p.draft.meta.name, kind: p.file.status === "published" ? "Project · unpublished changes" : "Project · draft", at: p.draft.draftUpdatedAt })),
-    ...PAGE_SLUGS.filter((s) => pageHasUnpublished(pages[s])).map((s) => ({ href: `/admin/editor?type=page&id=${s}`, name: pages[s].draft.meta.title, kind: "Page · unpublished changes", at: pages[s].draft.draftUpdatedAt })),
+    ...projects.filter((p) => p.file.status !== "archived" && projectHasUnpublished(p)).map((p) => ({ href: `/admin/editor/?type=project&id=${p.file.id}`, name: p.draft.meta.name, kind: p.file.status === "published" ? "Project · unpublished changes" : "Project · draft", at: p.draft.draftUpdatedAt })),
+    ...PAGE_SLUGS.filter((s) => pageHasUnpublished(pages[s])).map((s) => ({ href: `/admin/editor/?type=page&id=${s}`, name: pages[s].draft.meta.title, kind: "Page · unpublished changes", at: pages[s].draft.draftUpdatedAt })),
   ].sort((a, b) => b.at.localeCompare(a.at));
   const stats = [
     { label: "Projects", value: projects.length, sub: `${projects.filter((p) => p.file.status === "published").length} published`, href: "/admin/projects" },
@@ -29,8 +29,8 @@ export function Dashboard() {
           <h1 className="mt-1 text-2xl font-light">Portfolio admin</h1>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin/photos?upload=1" className="ui-btn">Upload photos</Link>
-          <Link href="/admin/projects?new=1" className="ui-btn ui-btn-primary">+ New project</Link>
+          <Link href="/admin/photos/?upload=1" className="ui-btn">Upload photos</Link>
+          <Link href="/admin/projects/?new=1" className="ui-btn ui-btn-primary">+ New project</Link>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export function Dashboard() {
         <ul className="ui-card divide-y divide-neutral-100">
           {projects.slice(0, 6).map((p) => (
             <li key={p.file.id}>
-              <Link href={`/admin/editor?type=project&id=${p.file.id}`} className="flex items-center justify-between px-4 py-3 hover:bg-neutral-50">
+              <Link href={`/admin/editor/?type=project&id=${p.file.id}`} className="flex items-center justify-between px-4 py-3 hover:bg-neutral-50">
                 <div className="flex items-center gap-3">
                   <span className="text-[13px]">{p.draft.meta.name}</span>
                   <span className="text-[11px] text-neutral-400">{[p.draft.meta.year, p.draft.meta.location].filter(Boolean).join(" · ")}</span>

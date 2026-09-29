@@ -385,7 +385,7 @@ function CreateGroupModal({ open, onClose, projects, photoIds }: { open: boolean
     setBusy(true);
     try {
       await appendBlock(project, createBlock("image-group", { photoIds, layout }));
-      router.push(`/admin/editor?type=project&id=${project}`);
+      router.push(`/admin/editor/?type=project&id=${project}`);
     } finally {
       setBusy(false);
     }

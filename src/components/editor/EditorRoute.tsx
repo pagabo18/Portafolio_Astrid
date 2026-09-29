@@ -82,7 +82,7 @@ export function EditorRoute() {
   if (!props) {
     return (
       <div className="p-10 text-[12px] text-neutral-500">
-        Nothing to edit here. <Link href="/admin/projects" className="underline">Back to projects</Link>
+        Nothing to edit here. <Link href="/admin/projects/" className="underline">Back to projects</Link>
       </div>
     );
   }

@@ -46,7 +46,7 @@ export default async function ProjectPage({ params }: Props) {
       <EditorialRoot document={p.snapshot.document} data={data} />
       {next && next.id !== p.id ? (
         <div className="mt-24 border-t hairline px-[var(--margin)] py-10">
-          <Link href={`/projects/${next.slug}`} className="group flex items-baseline justify-between">
+          <Link href={`/projects/${next.slug}/`} className="group flex items-baseline justify-between">
             <span className="eyebrow">Next project</span>
             <span className="text-[clamp(18px,2vw,30px)] font-light transition group-hover:opacity-60">{next.snapshot.meta.name} →</span>
           </Link>
@@ -69,7 +69,7 @@ function ProjectsIndex() {
           const cover = p.snapshot.meta.coverPhotoId ? photos.find((x) => x.id === p.snapshot.meta.coverPhotoId) : undefined;
           return (
             <li key={p.id}>
-              <Link href={`/projects/${p.slug}`} className="group grid grid-cols-12 items-center gap-6 py-6">
+              <Link href={`/projects/${p.slug}/`} className="group grid grid-cols-12 items-center gap-6 py-6">
                 <span className="ed-chapter-number col-span-1">{String(i + 1).padStart(2, "0")}</span>
                 <span className="col-span-2 hidden md:block">{cover ? <EditorialImage photo={cover} slot={{ ...newSlot({ span: 2, fit: "cover", aspect: "3:2" }) }} /> : null}</span>
                 <span className="col-span-7 text-[clamp(18px,2vw,30px)] font-light transition group-hover:opacity-60">{p.snapshot.meta.name}</span>

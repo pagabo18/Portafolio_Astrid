@@ -212,7 +212,7 @@ export function Editor(props: EditorProps) {
           ) : null}
         </aside>
         <div className="min-w-0 flex-1">
-          <Canvas data={{ project: projectHeader, projects: props.projects, archivePhotos: archivePhotos.filter((p) => p.showInArchive), categories: props.categories, years: props.years, projectHrefBase: "/preview/project" }} />
+          <Canvas data={{ project: projectHeader, projects: props.projects, archivePhotos: archivePhotos.filter((p) => p.showInArchive), categories: props.categories, years: props.years, projectLinkMode: "none" }} />
         </div>
         <aside className="w-[340px] shrink-0 overflow-hidden border-l border-neutral-200 bg-white">
           <Inspector onPickPhotos={requestPhotos} scope={scope} />

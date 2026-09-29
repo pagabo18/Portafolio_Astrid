@@ -37,7 +37,7 @@ export function TopBar({
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(target.name);
 
-  const previewHref = `/preview?type=${target.type}&id=${target.id}`;
+  const previewHref = `/preview/?type=${target.type}&id=${target.id}`;
   const liveHref = withBase(target.type === "project" ? `/projects/${target.slug}/` : target.slug === "home" ? "/" : `/${target.slug}/`);
   const backHref = target.type === "project" ? "/admin/projects" : "/admin/pages";
 

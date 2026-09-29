@@ -120,5 +120,5 @@ export function buildRenderData(doc: BlocksDocument): RenderData {
     categories = loadCategories().filter((c) => archivePhotos!.some((p) => p.categoryId === c.id)).map((c) => ({ id: c.id, name: c.name }));
     years = [...new Set(archivePhotos.map((p) => p.year).filter(Boolean))].sort().reverse();
   }
-  return { photos, projects, archivePhotos, categories, years, projectHrefBase: "/projects", interactive: true };
+  return { photos, projects, archivePhotos, categories, years, projectLinkMode: "public", interactive: true };
 }

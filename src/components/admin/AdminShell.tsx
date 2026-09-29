@@ -10,9 +10,9 @@ const NAV = [
   { href: "/admin/projects", label: "Projects" },
   { href: "/admin/photos", label: "Photos" },
   { href: "/admin/pages", label: "Pages" },
-  { href: "/admin/editor?type=page&id=home", label: "Home", sub: true, match: "home" },
-  { href: "/admin/editor?type=page&id=archive", label: "Archive", sub: true, match: "archive" },
-  { href: "/admin/editor?type=page&id=about", label: "About", sub: true, match: "about" },
+  { href: "/admin/editor/?type=page&id=home", label: "Home", sub: true, match: "home" },
+  { href: "/admin/editor/?type=page&id=archive", label: "Archive", sub: true, match: "archive" },
+  { href: "/admin/editor/?type=page&id=about", label: "About", sub: true, match: "about" },
   { href: "/admin/settings", label: "Settings" },
 ];
 
