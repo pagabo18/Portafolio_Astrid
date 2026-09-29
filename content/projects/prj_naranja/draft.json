@@ -187,10 +187,10 @@
             "id": "s_0d20fc65",
             "photoId": "ph_9c8avteks1",
             "span": 6,
-            "start": "auto",
+            "start": 1,
             "anchorX": "custom",
             "offsetX": 0,
-            "offsetY": 0,
+            "offsetY": -2,
             "vAlign": "bottom",
             "fit": "contain",
             "aspect": "auto",
@@ -409,5 +409,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T18:53:15.969Z"
+  "draftUpdatedAt": "2026-09-29T18:53:21.716Z"
 }
