@@ -30,6 +30,7 @@
       "archiveOrder": 0,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:25:08.812Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -63,6 +64,7 @@
       "archiveOrder": 1,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:25:19.360Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -96,6 +98,7 @@
       "archiveOrder": 2,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:25:28.787Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -129,6 +132,7 @@
       "archiveOrder": 3,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:27:28.929Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -154,7 +158,7 @@
       "camera": "",
       "lens": "",
       "categoryId": "cat_mmmknmhp6s",
-      "projectId": "prj_naranja",
+      "projectId": null,
       "hidden": false,
       "featured": false,
       "showOnHome": false,
@@ -162,8 +166,9 @@
       "archiveOrder": 4,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:27:36.715Z",
-      "updatedAt": "2026-09-29T02:51:20.126Z"
+      "updatedAt": "2026-09-29T03:35:47.877Z"
     },
     {
       "id": "ph_cqv6kk4d9z",
@@ -195,6 +200,7 @@
       "archiveOrder": 5,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:28:19.127Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -228,6 +234,7 @@
       "archiveOrder": 6,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:35:52.032Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -261,6 +268,7 @@
       "archiveOrder": 7,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:35:59.482Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -294,6 +302,7 @@
       "archiveOrder": 8,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:36:07.443Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -327,6 +336,7 @@
       "archiveOrder": 9,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:36:15.409Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -360,6 +370,7 @@
       "archiveOrder": 10,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:36:23.492Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -393,6 +404,7 @@
       "archiveOrder": 11,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:36:47.493Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -426,6 +438,7 @@
       "archiveOrder": 12,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:36:55.480Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -459,6 +472,7 @@
       "archiveOrder": 13,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:37:35.437Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     },
@@ -492,6 +506,7 @@
       "archiveOrder": 14,
       "focalX": 0.5,
       "focalY": 0.5,
+      "noWatermark": false,
       "createdAt": "2026-09-29T02:37:44.928Z",
       "updatedAt": "2026-09-29T02:51:20.126Z"
     }
