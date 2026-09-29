@@ -184,12 +184,12 @@
           {
             "id": "s_f347b2fb",
             "photoId": "ph_inayiik97u",
-            "span": 6,
-            "start": 4,
-            "anchorX": "center",
+            "span": 8,
+            "start": 5,
+            "anchorX": "right",
             "offsetX": 0,
             "offsetY": 0,
-            "vAlign": "bottom",
+            "vAlign": "top",
             "fit": "contain",
             "aspect": "auto",
             "rotation": 0,
@@ -292,5 +292,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:47:51.838Z"
+  "draftUpdatedAt": "2026-09-29T19:48:02.868Z"
 }
