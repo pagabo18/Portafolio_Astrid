@@ -94,7 +94,7 @@
             "caption": {
               "show": true,
               "title": true,
-              "location": true,
+              "location": false,
               "year": true,
               "index": true,
               "caption": true,
@@ -292,5 +292,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:49:54.983Z"
+  "draftUpdatedAt": "2026-09-29T19:49:57.895Z"
 }
