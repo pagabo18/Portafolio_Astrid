@@ -282,10 +282,10 @@
             "photoId": "ph_au9dipnk1e",
             "span": 4,
             "start": 9,
-            "anchorX": "custom",
+            "anchorX": "right",
             "offsetX": 0,
             "offsetY": 0,
-            "vAlign": "bottom",
+            "vAlign": "top",
             "fit": "contain",
             "aspect": "auto",
             "rotation": 0,
@@ -312,5 +312,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:51:46.972Z"
+  "draftUpdatedAt": "2026-09-29T19:51:53.525Z"
 }
