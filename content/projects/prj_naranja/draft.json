@@ -408,6 +408,52 @@
         }
       },
       {
+        "id": "b_802e31ba",
+        "visible": true,
+        "spacingTop": "m",
+        "spacingBottom": "m",
+        "background": "default",
+        "textColor": "auto",
+        "label": "",
+        "type": "text-image",
+        "font": "",
+        "order": "text-first",
+        "content": "",
+        "textSpan": 4,
+        "image": {
+          "id": "s_f01d131c",
+          "photoId": null,
+          "span": 7,
+          "start": "auto",
+          "anchorX": "custom",
+          "offsetX": 0,
+          "offsetY": 0,
+          "vAlign": "top",
+          "fit": "contain",
+          "aspect": "auto",
+          "rotation": 0,
+          "scale": 1,
+          "overlap": false,
+          "zIndex": 0,
+          "fullscreen": true,
+          "visible": true,
+          "caption": {
+            "show": false,
+            "title": true,
+            "location": true,
+            "year": true,
+            "index": false,
+            "caption": true,
+            "metadata": false,
+            "text": "",
+            "align": "left"
+          },
+          "focal": null,
+          "responsive": {}
+        },
+        "vAlign": "bottom"
+      },
+      {
         "id": "b_89e87f36",
         "visible": true,
         "spacingTop": "m",
@@ -455,5 +501,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:40:19.983Z"
+  "draftUpdatedAt": "2026-09-29T19:40:33.717Z"
 }
