@@ -184,17 +184,6 @@
         ]
       },
       {
-        "id": "b_6137111d",
-        "visible": true,
-        "spacingTop": "none",
-        "spacingBottom": "none",
-        "background": "default",
-        "textColor": "auto",
-        "label": "",
-        "type": "spacer",
-        "size": "l"
-      },
-      {
         "id": "b_287e6656",
         "visible": true,
         "spacingTop": "m",
@@ -520,5 +509,5 @@
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T19:44:55.605Z"
+  "draftUpdatedAt": "2026-09-29T19:45:03.307Z"
 }
