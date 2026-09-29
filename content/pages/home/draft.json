@@ -14,8 +14,12 @@
         "spacingTop": "s",
         "spacingBottom": "s",
         "background": "default",
+        "textColor": "auto",
         "label": "",
         "type": "chapter",
+        "font": "",
+        "scale": 1,
+        "italic": false,
         "number": "",
         "title": "Selected work",
         "subtitle": "",
@@ -27,6 +31,7 @@
         "spacingTop": "m",
         "spacingBottom": "m",
         "background": "default",
+        "textColor": "auto",
         "label": "",
         "type": "project-list",
         "source": "home",
@@ -41,6 +46,7 @@
         "spacingTop": "none",
         "spacingBottom": "none",
         "background": "default",
+        "textColor": "auto",
         "label": "",
         "type": "spacer",
         "size": "xl"
@@ -51,8 +57,10 @@
         "spacingTop": "m",
         "spacingBottom": "xxl",
         "background": "offwhite",
+        "textColor": "auto",
         "label": "",
         "type": "text-image",
+        "font": "",
         "order": "text-first",
         "content": "asdasdasdasd",
         "textSpan": 8,
@@ -61,6 +69,7 @@
           "photoId": "ph_demo05",
           "span": 7,
           "start": "auto",
+          "anchorX": "custom",
           "offsetX": 0,
           "offsetY": 0,
           "vAlign": "top",
@@ -87,8 +96,28 @@
           "responsive": {}
         },
         "vAlign": "bottom"
+      },
+      {
+        "id": "b_bcddaf61",
+        "visible": true,
+        "spacingTop": "m",
+        "spacingBottom": "m",
+        "background": "default",
+        "textColor": "auto",
+        "label": "",
+        "type": "text",
+        "variant": "body",
+        "font": "playfair",
+        "weight": "regular",
+        "scale": 1,
+        "italic": false,
+        "tracking": 0,
+        "content": "Fotografía de Astrid",
+        "align": "left",
+        "span": 6,
+        "start": "auto"
       }
     ]
   },
-  "draftUpdatedAt": "2026-09-29T01:32:44.480Z"
+  "draftUpdatedAt": "2026-09-29T01:51:57.562Z"
 }

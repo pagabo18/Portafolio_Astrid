@@ -44,6 +44,10 @@ export type EditorHooks = {
   selection: Selection;
   onSelect: (sel: Selection) => void;
   showGrid: boolean;
+  /** Move or resize a photo by dragging it on the canvas. */
+  onDragSlot?: (blockId: string, slotId: string, patch: { span?: number; start?: number | "auto"; offsetY?: number; anchorX?: "custom" }) => void;
+  /** Same, for a text block placed on the grid. */
+  onDragBlock?: (blockId: string, patch: { span?: number; start?: number | "auto" }) => void;
 };
 
 export type EditorialProps = {

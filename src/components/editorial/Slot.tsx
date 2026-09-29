@@ -1,7 +1,8 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import type { ImageSlot, SlotOverride } from "@/lib/blocks/schema";
+import { resolveStart, type ImageSlot, type SlotOverride } from "@/lib/blocks/schema";
+import { useGridDrag, EdgeHandles } from "@/components/editor/gridDrag";
 import { EditorialImage } from "./EditorialImage";
 import { Caption } from "./Caption";
 import { useLightbox } from "./Lightbox";
@@ -26,12 +27,13 @@ export function autoMobile(slot: ImageSlot): Required<Pick<SlotOverride, "span" 
 }
 
 export function slotStyle(slot: ImageSlot): CSSProperties {
-  const t = { ...autoTablet(slot), ...(slot.responsive.tablet ?? {}) };
-  const m = { ...autoMobile(slot), ...(slot.responsive.mobile ?? {}) };
+  const start = resolveStart(slot);
+  const t = { ...autoTablet({ ...slot, start }), ...(slot.responsive.tablet ?? {}) };
+  const m = { ...autoMobile({ ...slot, start }), ...(slot.responsive.mobile ?? {}) };
   const v = slot.vAlign === "top" ? "start" : slot.vAlign === "bottom" ? "end" : "center";
   const s: Record<string, string> = {
     "--span": String(slot.span),
-    "--start": slot.start === "auto" ? "auto" : String(slot.start),
+    "--start": start === "auto" ? "auto" : String(start),
     "--ox": String(slot.offsetX),
     "--oy": String(slot.offsetY),
     "--span-md": String(t.span),
@@ -68,6 +70,14 @@ export function Slot({
   const photo = slot.photoId ? data.photos[slot.photoId] : undefined;
   const lightbox = useLightbox();
   const selected = editor?.selection?.blockId === blockId && editor?.selection?.slotId === slot.id;
+  const canDrag = !!editor?.onDragSlot;
+  const { dragging, handlers, edgeHandlers } = useGridDrag({
+    id: slot.id,
+    enabled: canDrag,
+    value: { span: slot.span, start: resolveStart(slot), offsetY: slot.offsetY },
+    onSelect: () => editor?.onSelect({ blockId, slotId: slot.id }),
+    onChange: (patch) => editor?.onDragSlot?.(blockId, slot.id, patch),
+  });
   if (!slot.visible && !editor) return null;
   if (!photo && !editor) return null;
 
@@ -83,6 +93,8 @@ export function Slot({
       data-overlap={slot.overlap ? "true" : undefined}
       data-hidden-md={hiddenMd ? "true" : undefined}
       data-hidden-sm={hiddenSm ? "true" : undefined}
+      data-draggable={canDrag ? "true" : undefined}
+      data-dragging={dragging ? "true" : undefined}
       onClick={
         editor
           ? (e) => {
@@ -91,6 +103,7 @@ export function Slot({
             }
           : undefined
       }
+      {...handlers}
     >
       {photo ? (
         <>
@@ -105,6 +118,8 @@ export function Slot({
       ) : (
         <div className="ed-empty-slot">{editor ? "Select photo" : ""}</div>
       )}
+      {canDrag ? <EdgeHandles edgeHandlers={edgeHandlers} /> : null}
+      {dragging ? <span className="ed-drag-hint">{slot.span}/12 · col {resolveStart(slot) === "auto" ? "auto" : resolveStart(slot)}</span> : null}
       {editor && !slot.visible ? (
         <div className="pointer-events-none absolute inset-0 grid place-items-center bg-white/60 text-[10px] uppercase tracking-widest text-neutral-500">
           Hidden

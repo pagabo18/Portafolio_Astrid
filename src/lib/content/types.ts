@@ -125,6 +125,14 @@ export const siteSettingsSchema = z.object({
     { label: "About", href: "/about" },
   ]),
   theme: z.enum(["paper", "white"]).default("paper"),
+  /** Page background and default text colour, from the palette or a #hex. */
+  pageBackground: z.string().max(24).default(""),
+  pageText: z.string().max(24).default(""),
+  /** Keys from the font library. */
+  fontBody: z.string().max(32).default("helvetica"),
+  fontHeading: z.string().max(32).default(""),
+  /** Language of the admin interface. */
+  adminLanguage: z.enum(["es", "en"]).default("es"),
   /** Downscale uploads in the browser to this many px on the long edge (0 = keep original). */
   uploadMaxPx: z.number().default(0),
 });

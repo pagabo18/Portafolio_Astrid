@@ -10,11 +10,13 @@ import { UploadDropzone, UploadProgress, useUploader } from "./UploadDropzone";
 import { ConfirmDialog, Modal } from "./ui/Modal";
 import { Field, Toggle } from "./ui/Fields";
 import { FocalPointEditor } from "./FocalPointEditor";
+import { useT } from "@/lib/i18n/useT";
 
 type Cat = { id: string; name: string };
 type Proj = { id: string; name: string };
 
 export function PhotoLibrary() {
+  const t = useT();
   const params = useSearchParams();
   const openUpload = params.get("upload") === "1";
   const records = useAdminState((s) => s.photos);
@@ -101,7 +103,7 @@ export function PhotoLibrary() {
   }
 
   async function addCategory() {
-    const name = window.prompt("New category name");
+    const name = window.prompt(t("New category name"));
     if (!name?.trim()) return;
     await createCategory(name);
   }
@@ -127,12 +129,12 @@ export function PhotoLibrary() {
       <div className="min-w-0 flex-1 px-8 py-8">
         <div className="mb-6 flex items-end justify-between">
           <div>
-            <div className="eyebrow">Photos · media library</div>
-            <h1 className="mt-1 text-2xl font-light">{photos.length} photograph{photos.length === 1 ? "" : "s"}</h1>
+            <div className="eyebrow">{t("Photos · media library")}</div>
+            <h1 className="mt-1 text-2xl font-light">{photos.length} {t("Photos").toLowerCase()}</h1>
           </div>
           <div className="flex gap-2">
-            <button className="ui-btn" onClick={addCategory}>+ Category</button>
-            <button className="ui-btn ui-btn-primary" onClick={() => setShowUpload((s) => !s)}>Upload</button>
+            <button className="ui-btn" onClick={addCategory}>{t("+ Category")}</button>
+            <button className="ui-btn ui-btn-primary" onClick={() => setShowUpload((s) => !s)}>{t("Upload")}</button>
           </div>
         </div>
 
@@ -143,36 +145,36 @@ export function PhotoLibrary() {
         ) : null}
 
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <input className="ui-input max-w-52" placeholder="Search…" value={q} onChange={(e) => setQ(e.target.value)} />
+          <input className="ui-input max-w-52" placeholder={t("Search…")} value={q} onChange={(e) => setQ(e.target.value)} />
           <select className="ui-input max-w-40" value={cat} onChange={(e) => setCat(e.target.value)}>
-            <option value="">All categories</option>
+            <option value="">{t("All categories")}</option>
             {cats.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
           <select className="ui-input max-w-44" value={proj} onChange={(e) => setProj(e.target.value)}>
-            <option value="">All projects</option>
+            <option value="">{t("All projects")}</option>
             {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
           {years.length ? (
             <select className="ui-input max-w-28" value={year} onChange={(e) => setYear(e.target.value)}>
-              <option value="">Any year</option>
+              <option value="">{t("Any year")}</option>
               {years.map((y) => <option key={y} value={y}>{y}</option>)}
             </select>
           ) : null}
           <div className="ui-seg">
             {[["", "Any"], ["landscape", "▭"], ["portrait", "▯"], ["square", "□"]].map(([v, l]) => (
-              <button key={v} data-active={orientation === v} onClick={() => setOrientation(v)} title={v || "Any orientation"}>{l}</button>
+              <button key={v} data-active={orientation === v} onClick={() => setOrientation(v)} title={t(v ? v[0].toUpperCase() + v.slice(1) : "Any")}>{l}</button>
             ))}
           </div>
           <div className="ui-seg">
             {(["all", "visible", "hidden"] as const).map((v) => (
-              <button key={v} data-active={vis === v} onClick={() => setVis(v)}>{v}</button>
+              <button key={v} data-active={vis === v} onClick={() => setVis(v)}>{t(v)}</button>
             ))}
           </div>
           <select className="ui-input max-w-32" value={sort} onChange={(e) => setSort(e.target.value as typeof sort)}>
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-            <option value="name">Name</option>
-            <option value="size">Size</option>
+            <option value="newest">{t("Newest")}</option>
+            <option value="oldest">{t("Oldest")}</option>
+            <option value="name">{t("Name")}</option>
+            <option value="size">{t("Size")}</option>
           </select>
           <div className="ui-seg ml-auto">
             {(["s", "m", "l"] as const).map((v) => (
@@ -183,30 +185,30 @@ export function PhotoLibrary() {
 
         {selected.length ? (
           <div className="sticky top-0 z-20 mb-4 flex flex-wrap items-center gap-2 rounded-sm border border-neutral-900 bg-neutral-900 px-3 py-2 text-[12px] text-white">
-            <span className="mr-2">{selected.length} selected</span>
+            <span className="mr-2">{selected.length} {t("selected")}</span>
             <select className="h-7 rounded-sm bg-white/10 px-2 text-white" defaultValue="" onChange={(e) => { if (e.target.value) bulk("add-to-project", e.target.value); e.target.value = ""; }}>
-              <option value="" className="text-black">Add to project…</option>
+              <option value="" className="text-black">{t("Add to project…")}</option>
               {projects.map((p) => <option key={p.id} value={p.id} className="text-black">{p.name}</option>)}
             </select>
             <select className="h-7 rounded-sm bg-white/10 px-2 text-white" defaultValue="" onChange={(e) => { bulk("category", e.target.value || null); e.target.value = ""; }}>
-              <option value="" className="text-black">Set category…</option>
+              <option value="" className="text-black">{t("Set category…")}</option>
               {cats.map((c) => <option key={c.id} value={c.id} className="text-black">{c.name}</option>)}
-              <option value="" className="text-black">— none —</option>
+              <option value="" className="text-black">{t("— none —")}</option>
             </select>
-            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => setGroupModal(true)}>Create group…</button>
-            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("hide")}>Hide</button>
-            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("show")}>Show</button>
-            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("home")}>Show on home</button>
-            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("archive")}>In archive</button>
-            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("unarchive")}>Not in archive</button>
-            <button className="rounded-sm px-2 py-1 text-red-300 hover:bg-white/10" onClick={() => bulk("delete")}>Delete…</button>
-            <button className="ml-auto rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => setSelected([])}>Clear</button>
+            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => setGroupModal(true)}>{t("Create group…")}</button>
+            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("hide")}>{t("Hide")}</button>
+            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("show")}>{t("Show")}</button>
+            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("home")}>{t("Show on home")}</button>
+            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("archive")}>{t("In archive")}</button>
+            <button className="rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => bulk("unarchive")}>{t("Not in archive")}</button>
+            <button className="rounded-sm px-2 py-1 text-red-300 hover:bg-white/10" onClick={() => bulk("delete")}>{t("Delete…")}</button>
+            <button className="ml-auto rounded-sm px-2 py-1 hover:bg-white/10" onClick={() => setSelected([])}>{t("Clear")}</button>
           </div>
         ) : null}
 
         {!list.length ? (
           <div className="ui-card px-6 py-20 text-center text-[12.5px] text-neutral-500">
-            {photos.length ? "No photographs match these filters." : "The library is empty. Upload photographs to get started."}
+            {t(photos.length ? "No photographs match these filters." : "The library is empty. Upload photographs to get started.")}
           </div>
         ) : (
           <div className={`grid ${cols} gap-3`}>
@@ -227,14 +229,14 @@ export function PhotoLibrary() {
                     <span className="truncate">{p.title || p.filename}</span>
                     <span className="shrink-0">{formatRatio(p.aspectRatio)}</span>
                   </div>
-                  {p.hidden ? <span className="absolute right-1.5 top-1.5 rounded-sm bg-black/70 px-1 text-[9px] uppercase tracking-wider text-white">Hidden</span> : null}
+                  {p.hidden ? <span className="absolute right-1.5 top-1.5 rounded-sm bg-black/70 px-1 text-[9px] uppercase tracking-wider text-white">{t("Hide")}</span> : null}
                   {p.featured ? <span className="absolute right-1.5 bottom-1.5 text-[10px] text-white drop-shadow">★</span> : null}
                 </div>
               );
             })}
           </div>
         )}
-        <p className="mt-4 text-[11px] text-neutral-400">Click to open · ⌘/Ctrl+click to select · Shift+click for a range · ⌘/Ctrl+A select all</p>
+        <p className="mt-4 text-[11px] text-neutral-400">{t("Click to open · ⌘/Ctrl+click to select · Shift+click for a range · ⌘/Ctrl+A select all")}</p>
       </div>
 
       {openPhoto ? (
@@ -251,8 +253,8 @@ export function PhotoLibrary() {
       <ConfirmDialog
         open={!!confirm}
         onClose={() => setConfirm(null)}
-        title={`Delete ${confirm?.ids.length === 1 ? "photograph" : `${confirm?.ids.length} photographs`}?`}
-        message="The original and its previews are removed from the repository. Layouts that use them will show an empty slot. Use “Hide” if you only want them off the site."
+        title={`${t("Delete")} · ${confirm?.ids.length ?? 0}`}
+        message={t("The original and its previews are removed from the repository. Layouts that use them will show an empty slot. Use “Hide” if you only want them off the site.")}
         onConfirm={async () => { if (confirm) await doDelete(confirm.ids); }}
       />
       <CreateGroupModal open={groupModal} onClose={() => setGroupModal(false)} projects={projects} photoIds={selected} />
@@ -264,6 +266,7 @@ export function PhotoLibrary() {
 /* ------------------------------------------------------------------ */
 
 function PhotoDetails({ photo, categories, projects, onClose, onDelete }: { photo: PhotoView; categories: Cat[]; projects: Proj[]; onClose: () => void; onDelete: () => void }) {
+  const t = useT();
   const [p, setP] = useState(photo);
   const [state, setState] = useState<"idle" | "saving" | "saved">("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -305,7 +308,7 @@ function PhotoDetails({ photo, categories, projects, onClose, onDelete }: { phot
       <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
         <span className="truncate text-[12px] text-neutral-700">{p.filename}</span>
         <div className="flex items-center gap-3 text-[11px]">
-          <span className={state === "saving" ? "text-neutral-400" : state === "saved" ? "text-emerald-700" : "text-transparent"}>{state === "saving" ? "Saving…" : "Saved"}</span>
+          <span className={state === "saving" ? "text-neutral-400" : state === "saved" ? "text-emerald-700" : "text-transparent"}>{state === "saving" ? t("Saving…") : t("Saved")}</span>
           <button onClick={onClose} className="text-neutral-400 hover:text-neutral-900">✕</button>
         </div>
       </div>
@@ -313,47 +316,47 @@ function PhotoDetails({ photo, categories, projects, onClose, onDelete }: { phot
         <FocalPointEditor photo={p} x={p.focalX} y={p.focalY} onChange={(x, y) => patch({ focalX: x, focalY: y })} aspectPreview="16:9" />
 
         <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] text-neutral-600">
-          <dt className="text-neutral-400">Dimensions</dt><dd>{p.width} × {p.height}</dd>
-          <dt className="text-neutral-400">Aspect ratio</dt><dd>{formatRatio(p.aspectRatio)} · {p.orientation}</dd>
-          <dt className="text-neutral-400">Original</dt><dd>{formatBytes(p.bytes)} · {p.mime.replace("image/", "")}</dd>
-          <dt className="text-neutral-400">Uploaded</dt><dd>{new Date(p.createdAt).toLocaleDateString()}</dd>
+          <dt className="text-neutral-400">{t("Dimensions")}</dt><dd>{p.width} × {p.height}</dd>
+          <dt className="text-neutral-400">{t("Aspect ratio")}</dt><dd>{formatRatio(p.aspectRatio)} · {p.orientation}</dd>
+          <dt className="text-neutral-400">{t("Original")}</dt><dd>{formatBytes(p.bytes)} · {p.mime.replace("image/", "")}</dd>
+          <dt className="text-neutral-400">{t("Uploaded")}</dt><dd>{new Date(p.createdAt).toLocaleDateString()}</dd>
         </dl>
 
         <div className="flex gap-2">
           <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden onChange={(e) => e.target.files?.[0] && replace(e.target.files[0])} />
-          <button className="ui-btn" onClick={() => fileRef.current?.click()} disabled={replacing}>{replacing ? "Replacing…" : "Replace file"}</button>
-          <a className="ui-btn" href={p.originalUrl} target="_blank" rel="noreferrer">Original ↗</a>
-          <button className="ui-btn ui-btn-danger ml-auto" onClick={onDelete}>Delete…</button>
+          <button className="ui-btn" onClick={() => fileRef.current?.click()} disabled={replacing}>{replacing ? t("Replacing…") : t("Replace file")}</button>
+          <a className="ui-btn" href={p.originalUrl} target="_blank" rel="noreferrer">{t("Original ↗")}</a>
+          <button className="ui-btn ui-btn-danger ml-auto" onClick={onDelete}>{t("Delete…")}</button>
         </div>
 
         <div>
-          <div className="eyebrow mb-2">Visibility</div>
-          <Toggle label="Hidden (off the site, kept in library)" checked={p.hidden} onChange={(v) => patch({ hidden: v })} />
-          <Toggle label="Featured" checked={p.featured} onChange={(v) => patch({ featured: v })} />
-          <Toggle label="Show on home" checked={p.showOnHome} onChange={(v) => patch({ showOnHome: v })} />
-          <Toggle label="Show in archive" checked={p.showInArchive} onChange={(v) => patch({ showInArchive: v })} />
+          <div className="eyebrow mb-2">{t("Visibility")}</div>
+          <Toggle label={t("Hidden (off the site, kept in library)")} checked={p.hidden} onChange={(v) => patch({ hidden: v })} />
+          <Toggle label={t("Featured")} checked={p.featured} onChange={(v) => patch({ featured: v })} />
+          <Toggle label={t("Show on home")} checked={p.showOnHome} onChange={(v) => patch({ showOnHome: v })} />
+          <Toggle label={t("Show in archive")} checked={p.showInArchive} onChange={(v) => patch({ showInArchive: v })} />
         </div>
 
         <div>
-          <div className="eyebrow mb-2">Metadata</div>
-          <Field label="Title">{input("title")}</Field>
-          <Field label="Caption / description"><textarea className="ui-input min-h-16" value={p.description} onChange={(e) => patch({ description: e.target.value })} /></Field>
-          <Field label={<>Alt text {p.altSuggested ? <span className="ml-1 rounded-sm bg-amber-100 px-1 text-[9px] normal-case tracking-normal text-amber-800">suggested — review</span> : null}</>} hint="Describe the image for accessibility. A suggestion is generated from the file name; edit it to confirm.">
+          <div className="eyebrow mb-2">{t("Metadata")}</div>
+          <Field label={t("Title")}>{input("title")}</Field>
+          <Field label={t("Caption / description")}><textarea className="ui-input min-h-16" value={p.description} onChange={(e) => patch({ description: e.target.value })} /></Field>
+          <Field label={<>{t("Alt text")} {p.altSuggested ? <span className="ml-1 rounded-sm bg-amber-100 px-1 text-[9px] normal-case tracking-normal text-amber-800">{t("suggested — review")}</span> : null}</>} hint={t("Describe the image for accessibility. A suggestion is generated from the file name; edit it to confirm.")}>
             {input("alt")}
           </Field>
           <div className="grid grid-cols-2 gap-x-3">
-            <Field label="Year">{input("year")}</Field>
-            <Field label="Location">{input("location")}</Field>
-            <Field label="Camera">{input("camera")}</Field>
-            <Field label="Lens">{input("lens")}</Field>
+            <Field label={t("Year")}>{input("year")}</Field>
+            <Field label={t("Location")}>{input("location")}</Field>
+            <Field label={t("Camera")}>{input("camera")}</Field>
+            <Field label={t("Lens")}>{input("lens")}</Field>
           </div>
-          <Field label="Category">
+          <Field label={t("Category")}>
             <select className="ui-input" value={p.categoryId ?? ""} onChange={(e) => patch({ categoryId: e.target.value || null })}>
               <option value="">—</option>
               {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </Field>
-          <Field label="Primary project">
+          <Field label={t("Primary project")}>
             <select className="ui-input" value={p.projectId ?? ""} onChange={(e) => patch({ projectId: e.target.value || null })}>
               <option value="">—</option>
               {projects.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -367,18 +370,19 @@ function PhotoDetails({ photo, categories, projects, onClose, onDelete }: { phot
 
 /** Multi-select → CREATE GROUP → choose layout → appended to a project. */
 function CreateGroupModal({ open, onClose, projects, photoIds }: { open: boolean; onClose: () => void; projects: Proj[]; photoIds: string[] }) {
+  const t = useT();
   const router = useRouter();
   const [project, setProject] = useState(projects[0]?.id ?? "");
   const [layout, setLayout] = useState("two-columns");
   const [busy, setBusy] = useState(false);
   const layouts = [
-    ["two-columns", "Pair"],
-    ["triptych", "Triptych"],
-    ["grid", "Grid"],
-    ["sequence", "Sequence"],
-    ["spread", "Editorial spread"],
-    ["editorial-offset", "Editorial offset"],
-    ["custom", "Custom group"],
+    ["two-columns", t("Two columns")],
+    ["triptych", t("Triptych")],
+    ["grid", t("Grid")],
+    ["sequence", t("Sequence")],
+    ["spread", t("Spread")],
+    ["editorial-offset", t("Editorial offset")],
+    ["custom", t("Custom editorial group")],
   ];
   async function create() {
     if (!project) return;
@@ -391,21 +395,21 @@ function CreateGroupModal({ open, onClose, projects, photoIds }: { open: boolean
     }
   }
   return (
-    <Modal open={open} onClose={onClose} title={`Create group from ${photoIds.length} photos`} width="max-w-md" footer={<><button className="ui-btn" onClick={onClose}>Cancel</button><button className="ui-btn ui-btn-primary" disabled={!project || busy} onClick={create}>Add to project</button></>}>
+    <Modal open={open} onClose={onClose} title={`${t("Create group…")} · ${photoIds.length}`} width="max-w-md" footer={<><button className="ui-btn" onClick={onClose}>{t("Cancel")}</button><button className="ui-btn ui-btn-primary" disabled={!project || busy} onClick={create}>{t("Add to project…")}</button></>}>
       <div className="p-5">
-        <Field label="Project">
+        <Field label={t("Projects")}>
           <select className="ui-input" value={project} onChange={(e) => setProject(e.target.value)}>
             {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </Field>
-        <Field label="Layout">
+        <Field label={t("Layout")}>
           <div className="grid grid-cols-2 gap-1.5">
             {layouts.map(([v, l]) => (
               <button key={v} className={`ui-btn justify-start ${layout === v ? "ui-btn-primary" : ""}`} onClick={() => setLayout(v)}>{l}</button>
             ))}
           </div>
         </Field>
-        <p className="text-[11px] text-neutral-500">The group is appended as a block to the project draft. Rearrange it in the editor.</p>
+        <p className="text-[11px] text-neutral-500">{t("The group is appended as a block to the project draft. Rearrange it in the editor.")}</p>
       </div>
     </Modal>
   );

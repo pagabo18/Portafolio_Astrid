@@ -15,9 +15,13 @@ export const SPACING = ["none", "xs", "s", "m", "l", "xl", "xxl"] as const;
 export const spacingSchema = z.enum(SPACING);
 export type Spacing = z.infer<typeof spacingSchema>;
 
-export const BACKGROUNDS = ["default", "offwhite", "black"] as const;
-export const backgroundSchema = z.enum(BACKGROUNDS);
+/** A palette key from src/lib/design/colors.ts, or a #hex value. */
+export const backgroundSchema = z.string().max(24).default("default");
 export type Background = z.infer<typeof backgroundSchema>;
+/** Palette key from TEXT_SWATCHES, a #hex value, or "auto" to follow the background. */
+export const textColorSchema = z.string().max(24).default("auto");
+/** Key from the font library; empty means inherit the site font. */
+export const fontSchema = z.string().max(32).default("");
 
 export const ASPECTS = ["auto", "1:1", "4:5", "5:4", "3:2", "2:3", "4:3", "3:4", "16:9", "21:9", "2:1", "3:1"] as const;
 export const aspectSchema = z.enum(ASPECTS);
@@ -59,6 +63,12 @@ export const imageSlotSchema = z.object({
   photoId: z.string().nullable().default(null),
   span: spanSchema.default(6),
   start: startSchema.default("auto"),
+  /**
+   * Which edge the slot is pinned to. "custom" keeps whatever `start` says;
+   * the others re-derive `start` when the width changes, so a right-anchored
+   * photograph stays on the right margin.
+   */
+  anchorX: z.enum(["left", "center", "right", "custom"]).default("custom"),
   offsetX: offsetSchema.default(0),
   offsetY: offsetSchema.default(0),
   vAlign: z.enum(V_ALIGN).default("top"),
@@ -87,6 +97,7 @@ const base = {
   spacingTop: spacingSchema.default("m"),
   spacingBottom: spacingSchema.default("m"),
   background: backgroundSchema.default("default"),
+  textColor: textColorSchema.default("auto"),
   label: z.string().default(""),
 };
 
@@ -135,6 +146,12 @@ export const textBlockSchema = z.object({
   ...base,
   type: z.literal("text"),
   variant: z.enum(["body", "lead", "quote", "small"]).default("body"),
+  font: fontSchema.default(""),
+  weight: z.enum(["light", "regular", "medium", "bold"]).default("regular"),
+  /** Multiplies the size of the chosen variant (0.6 – 3). */
+  scale: z.number().min(0.6).max(3).default(1),
+  italic: z.boolean().default(false),
+  tracking: z.number().min(-0.05).max(0.4).default(0),
   content: z.string().default(""),
   align: z.enum(H_ALIGN).default("left"),
   span: spanSchema.default(6),
@@ -144,6 +161,7 @@ export const textBlockSchema = z.object({
 export const textImageBlockSchema = z.object({
   ...base,
   type: z.literal("text-image"),
+  font: fontSchema.default(""),
   order: z.enum(["text-first", "image-first"]).default("text-first"),
   content: z.string().default(""),
   textSpan: spanSchema.default(4),
@@ -160,6 +178,9 @@ export const spacerBlockSchema = z.object({
 export const chapterBlockSchema = z.object({
   ...base,
   type: z.literal("chapter"),
+  font: fontSchema.default(""),
+  scale: z.number().min(0.5).max(3).default(1),
+  italic: z.boolean().default(false),
   number: z.string().default(""),
   title: z.string().default(""),
   subtitle: z.string().default(""),
@@ -169,6 +190,8 @@ export const chapterBlockSchema = z.object({
 export const projectHeaderBlockSchema = z.object({
   ...base,
   type: z.literal("project-header"),
+  font: fontSchema.default(""),
+  scale: z.number().min(0.5).max(3).default(1),
   showTitle: z.boolean().default(true),
   showMeta: z.boolean().default(true), // year / location / category
   showDescription: z.boolean().default(true),
@@ -247,6 +270,34 @@ export function newSlot(partial: Partial<ImageSlot> = {}): ImageSlot {
 }
 
 /** Collect every photo id referenced by a document. */
+/** Column where a slot starts, honouring its anchor. */
+export function resolveStart(slot: Pick<ImageSlot, "span" | "start" | "anchorX">): number | "auto" {
+  switch (slot.anchorX) {
+    case "left":
+      return 1;
+    case "right":
+      return Math.max(1, 13 - slot.span);
+    case "center":
+      return Math.max(1, Math.round((12 - slot.span) / 2) + 1);
+    default:
+      return slot.start;
+  }
+}
+
+/** Apply a new width while keeping the slot pinned where it is. */
+export function withSpan(slot: ImageSlot, span: number): ImageSlot {
+  const next = { ...slot, span: Math.min(12, Math.max(1, span)) };
+  const start = resolveStart(next);
+  return { ...next, start: start === "auto" ? "auto" : Math.min(start, 13 - next.span) };
+}
+
+/** Anchor a slot to an edge (or free it), recomputing where it starts. */
+export function withAnchorX(slot: ImageSlot, anchorX: ImageSlot["anchorX"]): ImageSlot {
+  const next = { ...slot, anchorX };
+  const start = resolveStart(next);
+  return { ...next, start };
+}
+
 export function collectPhotoIds(doc: BlocksDocument): string[] {
   const ids = new Set<string>();
   for (const b of doc.blocks) {

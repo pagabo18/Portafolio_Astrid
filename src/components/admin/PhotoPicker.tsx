@@ -5,6 +5,7 @@ import type { PhotoView } from "@/lib/photos/view";
 import { useAdminState, views } from "@/lib/content/admin";
 import { Modal } from "./ui/Modal";
 import { UploadDropzone, UploadProgress, useUploader } from "./UploadDropzone";
+import { useT } from "@/lib/i18n/useT";
 
 type PickerProps = {
   open: boolean;
@@ -22,7 +23,8 @@ export function PhotoPicker(props: PickerProps) {
   return <PickerBody {...props} />;
 }
 
-function PickerBody({ onClose, onPick, multiple = true, title = "Select photo", projectId, initialSelected = [] }: PickerProps) {
+function PickerBody({ onClose, onPick, multiple = true, title, projectId, initialSelected = [] }: PickerProps) {
+  const t = useT();
   const records = useAdminState((s) => s.photos);
   const cats = useAdminState((s) => s.categories);
   const photos = useMemo(() => views(records), [records]);
@@ -58,30 +60,30 @@ function PickerBody({ onClose, onPick, multiple = true, title = "Select photo", 
     <Modal
       open
       onClose={onClose}
-      title={title}
+      title={title ?? t("Select photo")}
       width="max-w-5xl"
       footer={
         <>
-          <span className="mr-auto text-[11px] text-neutral-500">{selected.length ? `${selected.length} selected` : multiple ? "Click to select several" : "Click a photo"}</span>
-          <button className="ui-btn" onClick={onClose}>Cancel</button>
-          <button className="ui-btn ui-btn-primary" disabled={!selected.length} onClick={confirm}>{multiple ? `Use ${selected.length || ""} photo${selected.length === 1 ? "" : "s"}` : "Use photo"}</button>
+          <span className="mr-auto text-[11px] text-neutral-500">{selected.length ? `${selected.length} ${t("selected")}` : t(multiple ? "Click to select several" : "Click a photo")}</span>
+          <button className="ui-btn" onClick={onClose}>{t("Cancel")}</button>
+          <button className="ui-btn ui-btn-primary" disabled={!selected.length} onClick={confirm}>{multiple ? `${t("Done")} · ${selected.length}` : t("Done")}</button>
         </>
       }
     >
       <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 border-b border-neutral-100 bg-white px-5 py-3">
-        <input className="ui-input max-w-56" placeholder="Search…" value={q} onChange={(e) => setQ(e.target.value)} autoFocus />
+        <input className="ui-input max-w-56" placeholder={t("Search…")} value={q} onChange={(e) => setQ(e.target.value)} autoFocus />
         {projectId ? (
           <div className="ui-seg">
-            <button data-active={scope === "project"} onClick={() => setScope("project")}>This project</button>
-            <button data-active={scope === "all"} onClick={() => setScope("all")}>All photos</button>
+            <button data-active={scope === "project"} onClick={() => setScope("project")}>{t("This project")}</button>
+            <button data-active={scope === "all"} onClick={() => setScope("all")}>{t("All photos")}</button>
           </div>
         ) : null}
         <div className="ui-seg">
-          <button data-active={cat === ""} onClick={() => setCat("")}>All</button>
+          <button data-active={cat === ""} onClick={() => setCat("")}>{t("All")}</button>
           {cats.map((c) => <button key={c.id} data-active={cat === c.id} onClick={() => setCat(c.id)}>{c.name}</button>)}
         </div>
         <div className="ui-seg">
-          {[["", "Any"], ["landscape", "Landscape"], ["portrait", "Portrait"], ["square", "Square"]].map(([v, l]) => (
+          {[["", t("Any")], ["landscape", t("Landscape")], ["portrait", t("Portrait")], ["square", t("Square")]].map(([v, l]) => (
             <button key={v} data-active={orientation === v} onClick={() => setOrientation(v)}>{l}</button>
           ))}
         </div>
@@ -89,7 +91,7 @@ function PickerBody({ onClose, onPick, multiple = true, title = "Select photo", 
       </div>
       <div className="p-5">
         {!list.length ? (
-          <div className="py-20 text-center text-[12px] text-neutral-400">No photos match. Upload some above.</div>
+          <div className="py-20 text-center text-[12px] text-neutral-400">{t("No photos match. Upload some above.")}</div>
         ) : (
           <div className="grid grid-cols-4 gap-3 md:grid-cols-6">
             {list.map((p) => {
@@ -97,7 +99,7 @@ function PickerBody({ onClose, onPick, multiple = true, title = "Select photo", 
               return (
                 <button key={p.id} onClick={() => toggle(p.id)} onDoubleClick={() => { if (!multiple) { onPick([p]); onClose(); } }} className={`group relative aspect-square overflow-hidden rounded-sm bg-neutral-100 outline-offset-2 transition ${idx >= 0 ? "outline outline-2 outline-neutral-900" : "hover:opacity-90"}`} title={p.filename}>
                   <img src={p.thumbUrl} alt={p.alt} className="h-full w-full object-cover" loading="lazy" style={{ backgroundColor: p.dominantColor }} />
-                  {p.hidden ? <span className="absolute left-1 top-1 rounded-sm bg-black/70 px-1 text-[9px] uppercase tracking-wider text-white">Hidden</span> : null}
+                  {p.hidden ? <span className="absolute left-1 top-1 rounded-sm bg-black/70 px-1 text-[9px] uppercase tracking-wider text-white">{t("Hide")}</span> : null}
                   {idx >= 0 ? <span className="absolute right-1 top-1 grid h-5 min-w-5 place-items-center rounded-full bg-neutral-900 px-1 text-[10px] text-white">{multiple ? idx + 1 : "✓"}</span> : null}
                 </button>
               );

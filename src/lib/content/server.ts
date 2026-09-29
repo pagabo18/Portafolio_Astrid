@@ -19,6 +19,7 @@ import {
   type PhotoRecord,
   type ProjectFile,
   type SiteSettings,
+  PAGE_SLUGS,
 } from "./types";
 
 /**
@@ -82,6 +83,23 @@ export function loadPublishedProjects(opts: { home?: boolean } = {}): PublicProj
     .filter((p): p is ProjectFile & { published: NonNullable<ProjectFile["published"]> } => p.status === "published" && !!p.published)
     .filter((p) => (opts.home ? p.showOnHome : true))
     .map((p) => ({ ...p, snapshot: { ...p.published, document: parseDocument(p.published.document) }, categoryName: cats.find((c) => c.id === p.published.meta.categoryId)?.name ?? "" }));
+}
+
+/** Every font family referenced by the site settings and the published pages. */
+export function collectUsedFonts(): string[] {
+  const site = loadSite();
+  const keys = new Set<string>([site.fontBody, site.fontHeading].filter(Boolean));
+  const docs: BlocksDocument[] = [
+    ...loadPublishedProjects().map((p) => p.snapshot.document),
+    ...PAGE_SLUGS.map((s) => loadPage(s)?.document).filter((d): d is BlocksDocument => !!d),
+  ];
+  for (const d of docs) {
+    for (const b of d.blocks) {
+      const f = (b as { font?: string }).font;
+      if (f) keys.add(f);
+    }
+  }
+  return [...keys];
 }
 
 export function loadPage(slug: PageSlug) {

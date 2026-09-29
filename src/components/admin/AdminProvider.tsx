@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { repoFromEnv } from "@/lib/github/client";
 import { REPO_KEY, TOKEN_KEY, signIn, useAdminState } from "@/lib/content/admin";
+import { setLang } from "@/lib/i18n/useT";
 import { LoginForm } from "./LoginForm";
 import { AdminShell } from "./AdminShell";
 
@@ -16,6 +17,11 @@ export function AdminProvider({ children, bare }: { children: ReactNode; bare?: 
   const loading = useAdminState((s) => s.loading);
   const error = useAdminState((s) => s.error);
   const [restoring, setRestoring] = useState(true);
+  const siteLang = useAdminState((s) => s.site.adminLanguage);
+
+  useEffect(() => {
+    if (loaded && siteLang) setLang(siteLang);
+  }, [loaded, siteLang]);
 
   useEffect(() => {
     if (client) return;

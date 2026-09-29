@@ -2,12 +2,14 @@
 
 import { useRef } from "react";
 import type { PhotoView } from "@/lib/photos/view";
+import { useT } from "@/lib/i18n/useT";
 
 /**
  * Click on the image to place the focal point. Only the two numbers are
  * stored; the file is never touched. Used for object-position on crops.
  */
 export function FocalPointEditor({ photo, x, y, onChange, aspectPreview }: { photo: PhotoView; x: number; y: number; onChange: (x: number, y: number) => void; aspectPreview?: string }) {
+  const t = useT();
   const ref = useRef<HTMLDivElement>(null);
   function place(e: React.MouseEvent) {
     const r = ref.current!.getBoundingClientRect();
@@ -27,14 +29,14 @@ export function FocalPointEditor({ photo, x, y, onChange, aspectPreview }: { pho
       </div>
       {aspectPreview ? (
         <div className="mt-2">
-          <div className="ui-label">Crop preview</div>
+          <div className="ui-label">{t("Crop preview")}</div>
           <div className="overflow-hidden rounded-sm bg-neutral-200" style={{ aspectRatio: aspectPreview.replace(":", " / ") }}> <img src={photo.sources.webp[1]?.url ?? photo.thumbUrl} alt="" className="h-full w-full object-cover" style={{ objectPosition: `${x * 100}% ${y * 100}%` }} />
           </div>
         </div>
       ) : null}
       <div className="mt-1 flex items-center justify-between text-[10.5px] text-neutral-500">
-        <span>Click to set focal point</span>
-        <button type="button" className="hover:text-neutral-900" onClick={() => onChange(0.5, 0.5)}>Reset</button>
+        <span>{t("Click to set focal point")}</span>
+        <button type="button" className="hover:text-neutral-900" onClick={() => onChange(0.5, 0.5)}>{t("Reset")}</button>
       </div>
     </div>
   );

@@ -6,32 +6,34 @@ import { CSS } from "@dnd-kit/utilities";
 import type { Block } from "@/lib/blocks/schema";
 import { GROUP_LAYOUT_INFO, SINGLE_LAYOUT_INFO } from "@/lib/blocks/templates";
 import { useEditor } from "./store";
+import { useT } from "@/lib/i18n/useT";
 
-export function blockLabel(b: Block) {
+export function blockLabel(b: Block, t: (s: string) => string) {
   if (b.label) return b.label;
   switch (b.type) {
     case "image":
-      return SINGLE_LAYOUT_INFO[b.layout].name;
+      return t(SINGLE_LAYOUT_INFO[b.layout].name);
     case "image-group":
-      return `${GROUP_LAYOUT_INFO[b.layout].name} · ${b.images.length}`;
+      return `${t(GROUP_LAYOUT_INFO[b.layout].name)} · ${b.images.length}`;
     case "text":
-      return b.content ? `Text · ${b.content.slice(0, 24)}${b.content.length > 24 ? "…" : ""}` : "Text";
+      return b.content ? `${t("Text")} · ${b.content.slice(0, 22)}${b.content.length > 22 ? "…" : ""}` : t("Text");
     case "text-image":
-      return "Text + photo";
+      return t("Text + photo");
     case "spacer":
-      return `Spacer · ${b.size.toUpperCase()}`;
+      return `${t("Spacer")} · ${b.size.toUpperCase()}`;
     case "chapter":
-      return b.title ? `Chapter · ${b.title}` : "Chapter";
+      return b.title ? `${t("Chapter")} · ${b.title}` : t("Chapter");
     case "project-header":
-      return "Project header";
+      return t("Project header");
     case "project-list":
-      return `Project list · ${b.style}`;
+      return `${t("Project list")} · ${t(b.style[0].toUpperCase() + b.style.slice(1))}`;
     case "photo-archive":
-      return "Photo archive";
+      return t("Photo archive");
   }
 }
 
 export function BlockList({ onAdd }: { onAdd: (afterId: string | null) => void }) {
+  const t = useT();
   const doc = useEditor((s) => s.doc);
   const photos = useEditor((s) => s.photos);
   const selection = useEditor((s) => s.selection);
@@ -48,8 +50,8 @@ export function BlockList({ onAdd }: { onAdd: (afterId: string | null) => void }
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between px-3 pb-2 pt-3">
-        <span className="eyebrow">Blocks · {doc.blocks.length}</span>
-        <button className="ui-btn h-6 px-2 text-[11px]" onClick={() => onAdd(null)}>+ Add</button>
+        <span className="eyebrow">{t("Blocks")} · {doc.blocks.length}</span>
+        <button className="ui-btn h-6 px-2 text-[11px]" onClick={() => onAdd(null)}>{t("+ Add")}</button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4">
         <DndContext id="blocks-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -75,9 +77,9 @@ export function BlockList({ onAdd }: { onAdd: (afterId: string | null) => void }
             </ul>
           </SortableContext>
         </DndContext>
-        {!doc.blocks.length ? <p className="px-2 py-6 text-center text-[11px] text-neutral-400">No blocks yet.</p> : null}
+        {!doc.blocks.length ? <p className="px-2 py-6 text-center text-[11px] text-neutral-400">{t("No blocks yet.")}</p> : null}
         <button className="mt-2 w-full rounded-sm border border-dashed border-neutral-300 py-2 text-[11px] text-neutral-500 hover:border-neutral-500 hover:text-neutral-900" onClick={() => onAdd(null)}>
-          + Add block
+          {t("+ Add block")}
         </button>
       </div>
     </div>
@@ -85,6 +87,7 @@ export function BlockList({ onAdd }: { onAdd: (afterId: string | null) => void }
 }
 
 function Item({ block, index, thumbs, selected, onSelect, onAddAfter }: { block: Block; index: number; thumbs: (string | undefined)[]; selected: boolean; onSelect: () => void; onAddAfter: () => void }) {
+  const t = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: block.id });
   return (
     <li
@@ -93,7 +96,7 @@ function Item({ block, index, thumbs, selected, onSelect, onAddAfter }: { block:
       className={`group flex items-center gap-2 rounded-sm px-1.5 py-1 text-[12px] ${selected ? "bg-neutral-900 text-white" : "hover:bg-neutral-100"} ${isDragging ? "opacity-70 shadow-lg" : ""} ${!block.visible ? "opacity-50" : ""}`}
       onClick={onSelect}
     >
-      <button {...attributes} {...listeners} className={`cursor-grab px-0.5 ${selected ? "text-white/60" : "text-neutral-300 group-hover:text-neutral-600"}`} title="Drag to reorder" onClick={(e) => e.stopPropagation()}>
+      <button {...attributes} {...listeners} className={`cursor-grab px-0.5 ${selected ? "text-white/60" : "text-neutral-300 group-hover:text-neutral-600"}`} title={t("Drag to reorder")} onClick={(e) => e.stopPropagation()}>
         ≡
       </button>
       <span className={`w-5 shrink-0 text-[10px] tabular-nums ${selected ? "text-white/60" : "text-neutral-400"}`}>{String(index + 1).padStart(2, "0")}</span>
@@ -105,11 +108,11 @@ function Item({ block, index, thumbs, selected, onSelect, onAddAfter }: { block:
           ),
         )}
       </span>
-      <span className="min-w-0 flex-1 truncate">{blockLabel(block)}</span>
-      {!block.visible ? <span className="text-[9px] uppercase tracking-wider">hidden</span> : null}
+      <span className="min-w-0 flex-1 truncate">{blockLabel(block, t)}</span>
+      {!block.visible ? <span className="text-[9px] uppercase tracking-wider">{t("hidden")}</span> : null}
       <button
         className={`hidden h-5 w-5 rounded-sm text-[13px] leading-none group-hover:block ${selected ? "hover:bg-white/20" : "hover:bg-neutral-200"}`}
-        title="Add block after"
+        title={t("Add block after")}
         onClick={(e) => {
           e.stopPropagation();
           onAddAfter();

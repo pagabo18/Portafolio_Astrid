@@ -7,9 +7,11 @@ import { CSS } from "@dnd-kit/utilities";
 import type { PhotoView } from "@/lib/photos/view";
 import { setArchiveOrder, updatePhoto } from "@/lib/content/admin";
 import { Modal } from "@/components/admin/ui/Modal";
+import { useT } from "@/lib/i18n/useT";
 
 /** Archive settings: drag photographs to set the manual order; toggle visibility. */
 export function ArchiveOrderModal({ open, onClose, photos, onChange }: { open: boolean; onClose: () => void; photos: PhotoView[]; onChange: (p: PhotoView[]) => void }) {
+  const t = useT();
   const [list, setList] = useState(photos);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
   async function onDragEnd(e: DragEndEvent) {
@@ -27,9 +29,9 @@ export function ArchiveOrderModal({ open, onClose, photos, onChange }: { open: b
     await updatePhoto(p.id, { showInArchive: !p.showInArchive });
   }
   return (
-    <Modal open={open} onClose={onClose} title="Archive · order & visibility" width="max-w-4xl" footer={<button className="ui-btn ui-btn-primary" onClick={onClose}>Done</button>}>
+    <Modal open={open} onClose={onClose} title={t("Archive order & visibility")} width="max-w-4xl" footer={<button className="ui-btn ui-btn-primary" onClick={onClose}>{t("Done")}</button>}>
       <div className="p-4">
-        <p className="mb-3 text-[11.5px] text-neutral-500">Drag to set the manual order. Click the eye to include or exclude a photograph. Order and visibility are saved immediately and go live with the next deploy.</p>
+        <p className="mb-3 text-[11.5px] text-neutral-500">{t("Drag to set the manual order. Click the eye to include or exclude a photograph. Order and visibility are saved immediately and go live with the next deploy.")}</p>
         <DndContext id="archive-dnd" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={list.map((p) => p.id)} strategy={rectSortingStrategy}>
             <div className="grid grid-cols-8 gap-2">

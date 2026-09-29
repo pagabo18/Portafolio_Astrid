@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { useT } from "@/lib/i18n/useT";
 
 export function Modal({ open, onClose, title, children, width = "max-w-3xl", footer }: { open: boolean; onClose: () => void; title?: ReactNode; children: ReactNode; width?: string; footer?: ReactNode }) {
   useEffect(() => {
@@ -33,12 +34,13 @@ export function Modal({ open, onClose, title, children, width = "max-w-3xl", foo
   );
 }
 
-export function ConfirmDialog({ open, title, message, confirmLabel = "Delete", danger = true, onConfirm, onClose }: { open: boolean; title: string; message: string; confirmLabel?: string; danger?: boolean; onConfirm: () => void | Promise<void>; onClose: () => void }) {
+export function ConfirmDialog({ open, title, message, confirmLabel, danger = true, onConfirm, onClose }: { open: boolean; title: string; message: string; confirmLabel?: string; danger?: boolean; onConfirm: () => void | Promise<void>; onClose: () => void }) {
+  const t = useT();
   return (
     <Modal open={open} onClose={onClose} width="max-w-sm" title={title} footer={
       <>
-        <button className="ui-btn" onClick={onClose}>Cancel</button>
-        <button className={`ui-btn ${danger ? "ui-btn-danger" : "ui-btn-primary"}`} onClick={async () => { await onConfirm(); onClose(); }}>{confirmLabel}</button>
+        <button className="ui-btn" onClick={onClose}>{t("Cancel")}</button>
+        <button className={`ui-btn ${danger ? "ui-btn-danger" : "ui-btn-primary"}`} onClick={async () => { await onConfirm(); onClose(); }}>{confirmLabel ?? t("Delete")}</button>
       </>
     }>
       <p className="px-5 py-4 text-[13px] text-neutral-700">{message}</p>
